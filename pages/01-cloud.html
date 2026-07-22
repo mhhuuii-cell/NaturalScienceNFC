@@ -141,6 +141,11 @@
       color: var(--accent);
     }
 
+    .material-tab:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
     .media-stage {
       position: relative;
       width: 100%;
@@ -332,10 +337,10 @@
 
     <nav class="material-tabs" role="tablist" aria-label="真實證據素材，由老師操作">
       <button class="material-tab" type="button" role="tab" aria-selected="true" data-index="0">雲</button>
-      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="1">霧</button>
-      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="2">露</button>
-      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="3">霜</button>
-      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="4">熱水白色水氣</button>
+      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="1" disabled>霧</button>
+      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="2" disabled>露</button>
+      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="3" disabled>霜</button>
+      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="4" disabled>熱水白色水氣</button>
     </nav>
 
     <section class="media-stage" aria-label="主媒體區">
@@ -361,7 +366,7 @@
     </section>
 
     <section class="controls" aria-label="教師控制">
-      <button id="next-evidence" class="control-button" type="button">下一個證據</button>
+      <button id="next-evidence" class="control-button" type="button" disabled>下一個證據</button>
       <button id="show-model" class="control-button model" type="button">顯示概念模型</button>
       <button id="rewatch" class="control-button secondary" type="button">重新觀看</button>
       <p class="teacher-note">先完成觀察、討論與預測，再由老師決定何時顯示下一個證據或概念模型。</p>
@@ -431,6 +436,9 @@
 
     let currentEvidenceIndex = 0;
     let currentMode = 'evidence';
+    let highestUnlockedEvidenceIndex = 0;
+    let currentVideoCompleted = false;
+    let replayAuthorized = false;
 
     function stopMedia() {
       mainVideo.pause();
@@ -439,11 +447,20 @@
       mainPhoto.removeAttribute('src');
       mainVideo.hidden = true;
       mainPhoto.hidden = true;
+      currentVideoCompleted = false;
+      replayAuthorized = false;
     }
 
     function setPhase(phaseId) {
       phaseItems.forEach((item) => {
         item.classList.toggle('current', item.id === phaseId);
+      });
+    }
+
+    function updateEvidenceTabs(selectedIndex = null) {
+      materialTabs.forEach((tab, tabIndex) => {
+        tab.disabled = tabIndex > highestUnlockedEvidenceIndex;
+        tab.setAttribute('aria-selected', String(tabIndex === selectedIndex));
       });
     }
 
@@ -461,6 +478,7 @@
           `${item.label}｜素材尚未放入`,
           '影片補上後，這裡會自動顯示。'
         );
+        nextEvidenceButton.disabled = currentEvidenceIndex === evidenceItems.length - 1;
         return;
       }
 
@@ -468,6 +486,7 @@
         mainVideo.hidden = true;
         mediaPlaceholder.hidden = true;
         mainPhoto.hidden = false;
+        nextEvidenceButton.disabled = currentEvidenceIndex === evidenceItems.length - 1;
       };
 
       mainPhoto.onerror = () => {
@@ -475,6 +494,7 @@
           `${item.label}｜素材尚未放入`,
           '影片與照片補上後，這裡會自動顯示。'
         );
+        nextEvidenceButton.disabled = currentEvidenceIndex === evidenceItems.length - 1;
       };
 
       mainPhoto.alt = `${item.label}的真實證據照片`;
@@ -492,11 +512,9 @@
       promptLabel.textContent = '觀察提示';
       observationPrompt.textContent = item.prompt;
 
-      materialTabs.forEach((tab, tabIndex) => {
-        tab.setAttribute('aria-selected', String(tabIndex === index));
-      });
+      updateEvidenceTabs(index);
 
-      nextEvidenceButton.disabled = index === evidenceItems.length - 1;
+      nextEvidenceButton.disabled = true;
       const shouldRevise = isNewEvidence || index > 0;
       thinkingCard.classList.toggle('revision-card', shouldRevise);
       thinkingLabel.textContent = shouldRevise ? '修正想法' : '討論與預測';
@@ -504,6 +522,10 @@
         ? '新證據和原來的預測哪裡相同、哪裡不同？請指出畫面中的依據。'
         : '先說出畫面中的證據，再預測下一個現象可能出現在空中或物體表面。';
       setPhase(isNewEvidence || index > 0 ? 'phase-revise' : 'phase-observe');
+
+      mainVideo.autoplay = false;
+      mainVideo.loop = false;
+      mainVideo.controls = true;
 
       showPlaceholder(`${item.label}｜正在載入`, '如果素材尚未放入，稍後會顯示占位畫面。');
 
@@ -531,9 +553,10 @@
       thinkingCard.classList.add('revision-card');
       thinkingLabel.textContent = '修正想法';
       thinkingPrompt.textContent = '用新模型重新解釋一個畫面，並說明你修改了哪一個原來的想法。';
-      materialTabs.forEach((tab) => tab.setAttribute('aria-selected', 'false'));
+      updateEvidenceTabs();
       nextEvidenceButton.disabled = true;
       setPhase('phase-revise');
+      mainVideo.controls = true;
 
       showPlaceholder('概念模型｜正在載入', '模型素材尚未放入時，頁面仍可回看真實證據。');
 
@@ -553,7 +576,18 @@
 
     function rewatchCurrentMedia() {
       if (!mainVideo.hidden && Number.isFinite(mainVideo.duration)) {
+        replayAuthorized = true;
+        nextEvidenceButton.disabled = true;
+        mainVideo.controls = true;
         mainVideo.currentTime = 0;
+        const playRequest = mainVideo.play();
+
+        if (playRequest) {
+          playRequest.catch(() => {
+            replayAuthorized = false;
+          });
+        }
+
         return;
       }
 
@@ -567,13 +601,53 @@
     materialTabs.forEach((tab) => {
       tab.addEventListener('click', () => {
         const index = Number(tab.dataset.index);
+
+        if (index > highestUnlockedEvidenceIndex) {
+          return;
+        }
+
         loadEvidence(index, index !== currentEvidenceIndex || index > 0);
       });
     });
 
+    function holdOnFinalFrame() {
+      if (Number.isFinite(mainVideo.duration) && mainVideo.duration > 0) {
+        mainVideo.currentTime = Math.max(0, mainVideo.duration - 0.05);
+      }
+    }
+
+    mainVideo.addEventListener('play', () => {
+      if (currentVideoCompleted && !replayAuthorized) {
+        mainVideo.pause();
+        holdOnFinalFrame();
+        return;
+      }
+
+      if (replayAuthorized) {
+        replayAuthorized = false;
+        currentVideoCompleted = false;
+      }
+
+      if (currentMode === 'evidence') {
+        nextEvidenceButton.disabled = true;
+      }
+    });
+
+    mainVideo.addEventListener('ended', () => {
+      currentVideoCompleted = true;
+      mainVideo.controls = false;
+
+      if (currentMode === 'evidence' && currentEvidenceIndex < evidenceItems.length - 1) {
+        nextEvidenceButton.disabled = false;
+        setPhase('phase-teacher');
+      }
+    });
+
     nextEvidenceButton.addEventListener('click', () => {
-      if (currentEvidenceIndex < evidenceItems.length - 1) {
-        loadEvidence(currentEvidenceIndex + 1, true);
+      if (!nextEvidenceButton.disabled && currentEvidenceIndex < evidenceItems.length - 1) {
+        const nextIndex = currentEvidenceIndex + 1;
+        highestUnlockedEvidenceIndex = Math.max(highestUnlockedEvidenceIndex, nextIndex);
+        loadEvidence(nextIndex, true);
       }
     });
 
