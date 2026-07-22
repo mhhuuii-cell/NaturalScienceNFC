@@ -7,16 +7,16 @@
   <style>
     :root {
       color-scheme: dark;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --background: #000;
-      --surface: #111;
-      --surface-raised: #1a1a1a;
-      --border: #3f3f46;
-      --text: #fff;
-      --muted: #c4c4cc;
-      --accent: #67e8f9;
-      --accent-dark: #083344;
-      --focus: #facc15;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      --ink: #f4fbfa;
+      --muted: #b8cac7;
+      --line: rgba(216, 242, 237, 0.18);
+      --glass: rgba(8, 27, 30, 0.78);
+      --glass-solid: #102a2d;
+      --accent: #91e6d5;
+      --accent-strong: #c5fff3;
+      --deep: #061315;
+      --focus: #ffe082;
     }
 
     * {
@@ -28,7 +28,9 @@
     }
 
     html {
-      background: var(--background);
+      min-width: 320px;
+      min-height: 100%;
+      background: var(--deep);
     }
 
     body {
@@ -36,342 +38,933 @@
       min-height: 100vh;
       min-height: 100svh;
       margin: 0;
-      background: var(--background);
-      color: var(--text);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 14% 14%, rgba(57, 126, 122, 0.16), transparent 31%),
+        radial-gradient(circle at 86% 78%, rgba(45, 92, 112, 0.14), transparent 34%),
+        linear-gradient(145deg, #071719 0%, #0a2023 48%, #071317 100%);
+      color: var(--ink);
+    }
+
+    body::before,
+    body::after {
+      position: fixed;
+      inset: -18%;
+      z-index: -1;
+      pointer-events: none;
+      content: "";
+    }
+
+    body::before {
+      background:
+        radial-gradient(ellipse at 28% 45%, rgba(218, 243, 238, 0.055), transparent 32%),
+        radial-gradient(ellipse at 72% 58%, rgba(186, 226, 224, 0.045), transparent 36%);
+      filter: blur(42px);
+      animation: drift 24s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      display: none;
     }
 
     button {
       font: inherit;
     }
 
-    button:focus-visible {
+    button:focus-visible,
+    video:focus-visible,
+    summary:focus-visible {
       outline: 3px solid var(--focus);
-      outline-offset: 3px;
+      outline-offset: 4px;
     }
 
-    main {
-      width: min(100%, 100rem);
+    .view {
       min-height: 100vh;
       min-height: 100svh;
-      margin: 0 auto;
-      display: grid;
-      gap: 0.75rem;
-      padding:
-        max(0.65rem, env(safe-area-inset-top))
-        max(0.65rem, env(safe-area-inset-right))
-        max(0.65rem, env(safe-area-inset-bottom))
-        max(0.65rem, env(safe-area-inset-left));
     }
 
-    .page-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 1rem;
+    .intro-view {
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding:
+        max(2rem, env(safe-area-inset-top))
+        max(1.25rem, env(safe-area-inset-right))
+        max(2rem, env(safe-area-inset-bottom))
+        max(1.25rem, env(safe-area-inset-left));
+      isolation: isolate;
+    }
+
+    .intro-view::before,
+    .intro-view::after {
+      position: absolute;
+      z-index: -1;
+      border-radius: 50%;
+      content: "";
+      filter: blur(10px);
+    }
+
+    .intro-view::before {
+      width: min(48rem, 82vw);
+      aspect-ratio: 1.8;
+      top: 4%;
+      right: -15%;
+      background: radial-gradient(ellipse, rgba(202, 239, 233, 0.12), transparent 68%);
+      animation: cloud-float 18s ease-in-out infinite alternate;
+    }
+
+    .intro-view::after {
+      width: min(42rem, 76vw);
+      aspect-ratio: 2;
+      bottom: 5%;
+      left: -12%;
+      background: radial-gradient(ellipse, rgba(175, 216, 222, 0.11), transparent 68%);
+      animation: cloud-float 22s ease-in-out -6s infinite alternate-reverse;
+    }
+
+    .intro-card {
+      width: min(54rem, 92vw);
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 1.25rem;
+      color: var(--accent);
+      font-size: clamp(0.78rem, 1.4vw, 0.95rem);
+      font-weight: 750;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(1.15rem, 2.8vw, 2rem);
-      line-height: 1.2;
+      font-size: clamp(2.35rem, 7vw, 5.8rem);
+      font-weight: 720;
+      letter-spacing: -0.045em;
+      line-height: 1.08;
+      text-wrap: balance;
+      text-shadow: 0 0 54px rgba(166, 231, 222, 0.12);
     }
 
-    .progress {
-      flex: none;
-      margin: 0;
+    .intro-lead {
+      width: min(38rem, 100%);
+      margin: 1.5rem auto 2.35rem;
       color: var(--muted);
-      font-size: clamp(0.85rem, 1.7vw, 1rem);
-      white-space: nowrap;
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      line-height: 1.75;
     }
 
-    .learning-cycle {
-      margin: 0;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      list-style: none;
-      border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      overflow: hidden;
-      background: var(--surface);
-    }
-
-    .learning-cycle li {
-      min-height: 2.4rem;
-      display: grid;
-      place-items: center;
-      padding: 0.35rem;
-      border-right: 1px solid var(--border);
-      color: var(--muted);
-      font-size: clamp(0.75rem, 1.7vw, 0.95rem);
-      text-align: center;
-    }
-
-    .learning-cycle li:last-child {
-      border-right: 0;
-    }
-
-    .learning-cycle li.current {
-      background: var(--accent-dark);
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .material-tabs {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 0.5rem;
-    }
-
-    .material-tab {
-      min-height: 3rem;
-      padding: 0.55rem 0.7rem;
-      border: 2px solid var(--border);
-      border-radius: 0.65rem;
-      background: var(--surface);
-      color: var(--text);
-      font-weight: 700;
+    .primary-action {
+      min-width: 12rem;
+      min-height: 3.7rem;
+      padding: 0.8rem 1.8rem;
+      border: 1px solid rgba(197, 255, 243, 0.62);
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent-strong), #87daca);
+      box-shadow: 0 16px 40px rgba(53, 145, 133, 0.24);
+      color: #06211f;
+      font-weight: 800;
       cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease;
       touch-action: manipulation;
     }
 
-    .material-tab[aria-selected="true"] {
-      border-color: var(--accent);
-      background: var(--accent-dark);
-      color: var(--accent);
+    .primary-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 48px rgba(53, 145, 133, 0.34);
     }
 
-    .material-tab:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
+    .explore-view {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto auto auto;
+      align-content: center;
+      justify-items: center;
+      gap: clamp(0.32rem, 0.8vh, 0.58rem);
+      padding:
+        max(0.55rem, env(safe-area-inset-top))
+        max(1rem, env(safe-area-inset-right))
+        max(0.65rem, env(safe-area-inset-bottom))
+        max(1rem, env(safe-area-inset-left));
+    }
+
+    .progress-wrap {
+      min-height: 1.45rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .progress-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.62rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .progress-dot {
+      width: 0.52rem;
+      height: 0.52rem;
+      border: 1.5px solid rgba(226, 248, 244, 0.62);
+      border-radius: 50%;
+      background: transparent;
+      transition: width 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .progress-dot.current {
+      width: 1.22rem;
+      border-color: var(--accent-strong);
+      border-radius: 999px;
+      background: var(--accent-strong);
+      box-shadow: 0 0 18px rgba(145, 230, 213, 0.28);
+    }
+
+    .model-indicator {
+      margin: 0;
+      color: var(--accent-strong);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
     }
 
     .media-stage {
       position: relative;
-      width: 100%;
-      min-height: clamp(18rem, 53svh, 49rem);
+      align-self: center;
+      width: min(88vw, calc(80svh * 16 / 9));
+      aspect-ratio: 16 / 9;
       display: grid;
       place-items: center;
       overflow: hidden;
-      border: 1px solid #262626;
-      border-radius: 0.8rem;
-      background: #050505;
+      border: 1px solid rgba(218, 244, 239, 0.16);
+      border-radius: clamp(0.7rem, 1.25vw, 1rem);
+      background: #020606;
+      box-shadow:
+        0 18px 52px rgba(0, 0, 0, 0.34),
+        0 0 0 1px rgba(133, 209, 196, 0.035) inset;
     }
 
     .media-stage video,
     .media-stage img {
       width: 100%;
       height: 100%;
-      max-height: 64rem;
       display: block;
       object-fit: contain;
       background: #000;
     }
 
     .media-placeholder {
-      width: min(90%, 42rem);
-      min-height: 14rem;
+      position: absolute;
+      inset: 0;
       display: grid;
       place-items: center;
       align-content: center;
       gap: 0.8rem;
       padding: 2rem;
-      border: 2px dashed #52525b;
-      border-radius: 1rem;
-      background: linear-gradient(145deg, #0d0d0f, #18181b);
+      background:
+        radial-gradient(circle at 50% 42%, rgba(102, 172, 163, 0.16), transparent 34%),
+        linear-gradient(145deg, #071113, #0b1b1d);
       color: var(--muted);
       text-align: center;
     }
 
     .placeholder-mark {
-      width: 4.5rem;
-      height: 4.5rem;
+      width: 3.6rem;
+      height: 3.6rem;
       display: grid;
       place-items: center;
-      border: 2px solid var(--border);
+      border: 1px solid rgba(226, 248, 244, 0.28);
       border-radius: 50%;
-      color: var(--text);
-      font-size: 2rem;
+      color: var(--accent);
+      font-size: 1.35rem;
     }
 
     .media-placeholder strong {
-      color: var(--text);
-      font-size: clamp(1.25rem, 3vw, 2rem);
+      color: var(--ink);
+      font-size: clamp(1.1rem, 2.4vw, 1.6rem);
     }
 
     .media-placeholder p {
       margin: 0;
-      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      font-size: clamp(0.9rem, 1.7vw, 1rem);
     }
 
-    .prompt-panel {
+    .observation-card {
+      width: min(86vw, 70rem);
+      min-height: 4.35rem;
       display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      place-items: center;
+      align-content: center;
+      gap: 0.16rem;
+      margin: 0;
+      padding: 0.28rem 1rem 0.36rem;
+      text-align: center;
+    }
+
+    .evidence-label {
+      display: none;
+    }
+
+    .observation-question {
+      margin: 0;
+      font-size: clamp(1.12rem, 2.7vw, 1.8rem);
+      font-weight: 620;
+      line-height: 1.45;
+      text-wrap: balance;
+    }
+
+    .observation-hint {
+      margin: 0.04rem 0 0;
+      color: var(--muted);
+      font-size: clamp(0.8rem, 1.55vw, 1rem);
+      line-height: 1.45;
+      text-wrap: balance;
+    }
+
+    .teacher-trigger {
+      position: fixed;
+      right: max(1rem, env(safe-area-inset-right));
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      z-index: 20;
+      min-height: 2.65rem;
+      padding: 0.58rem 1rem;
+      border: 1px solid rgba(211, 240, 235, 0.26);
+      border-radius: 999px;
+      background: rgba(7, 24, 27, 0.86);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+      color: #d9f5ef;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      touch-action: manipulation;
+    }
+
+    .drawer-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 29;
+      border: 0;
+      background: rgba(0, 8, 10, 0.58);
+      cursor: default;
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .drawer-scrim.open {
+      opacity: 1;
+    }
+
+    .teacher-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 30;
+      width: min(23rem, 90vw);
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding:
+        max(1.2rem, env(safe-area-inset-top))
+        max(1.1rem, env(safe-area-inset-right))
+        max(1.2rem, env(safe-area-inset-bottom))
+        1.1rem;
+      border-left: 1px solid var(--line);
+      background: rgba(10, 31, 34, 0.97);
+      box-shadow: -22px 0 60px rgba(0, 0, 0, 0.42);
+      transform: translateX(105%);
+      transition: transform 220ms ease;
+      visibility: hidden;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .teacher-drawer.open {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .drawer-header h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .drawer-close {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink);
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .teacher-actions {
+      display: grid;
       gap: 0.65rem;
     }
 
-    .prompt-card {
-      min-height: 4.8rem;
-      padding: 0.75rem 0.9rem;
-      border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      background: var(--surface);
-    }
-
-    .prompt-card h2 {
-      margin: 0 0 0.35rem;
-      color: var(--accent);
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-    }
-
-    .prompt-card p {
-      margin: 0;
-      font-size: clamp(0.95rem, 2vw, 1.2rem);
-      line-height: 1.45;
-    }
-
-    .revision-card {
-      border-color: #a16207;
-      background: #211804;
-    }
-
-    .revision-card h2 {
-      color: #fde047;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-    }
-
-    .control-button {
-      min-width: min(100%, 13rem);
+    .teacher-action {
       min-height: 3.25rem;
-      padding: 0.65rem 1.25rem;
-      border: 2px solid #fff;
-      border-radius: 0.7rem;
-      background: #fff;
-      color: #000;
-      font-weight: 750;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.72rem 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 0.8rem;
+      background: rgba(216, 242, 237, 0.055);
+      color: var(--ink);
+      font-weight: 680;
+      text-align: left;
       cursor: pointer;
       touch-action: manipulation;
     }
 
-    .control-button.secondary {
-      background: #000;
-      color: #fff;
+    .teacher-action::after {
+      color: var(--muted);
+      content: "›";
+      font-size: 1.25rem;
     }
 
-    .control-button.model {
-      border-color: var(--accent);
-      background: var(--accent);
-      color: #06242b;
+    .teacher-action:hover:not(:disabled) {
+      border-color: rgba(145, 230, 213, 0.48);
+      background: rgba(145, 230, 213, 0.11);
     }
 
-    .control-button:disabled {
-      border-color: #3f3f46;
-      background: #27272a;
-      color: #71717a;
+    .teacher-action:disabled {
+      opacity: 0.38;
       cursor: not-allowed;
     }
 
-    .teacher-note {
-      flex-basis: 100%;
-      margin: 0;
+    .teacher-action.model {
+      border-color: rgba(145, 230, 213, 0.42);
+      color: var(--accent-strong);
+    }
+
+    .teaching-note {
+      margin-top: auto;
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
       color: var(--muted);
-      font-size: 0.85rem;
-      text-align: center;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .teaching-note summary {
+      color: var(--ink);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .teaching-note p {
+      margin: 0.75rem 0 0;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(-2%, -1%, 0) scale(1); }
+      to { transform: translate3d(3%, 2%, 0) scale(1.05); }
+    }
+
+    @keyframes cloud-float {
+      from { transform: translate3d(-3%, 0, 0) scale(0.96); opacity: 0.65; }
+      to { transform: translate3d(5%, 2%, 0) scale(1.06); opacity: 1; }
     }
 
     @media (orientation: landscape) and (min-width: 700px) {
-      main {
+      .explore-view {
         height: 100vh;
         height: 100svh;
-        grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
         overflow: hidden;
-      }
-
-      .media-stage {
-        min-height: 0;
-        height: 100%;
       }
     }
 
-    @media (max-width: 680px) {
-      .page-header {
-        display: block;
+    @media (max-height: 720px) and (orientation: landscape) {
+      .explore-view {
+        gap: 0.25rem;
+        padding-top: max(0.3rem, env(safe-area-inset-top));
+        padding-bottom: max(0.3rem, env(safe-area-inset-bottom));
       }
 
-      .progress {
-        margin-top: 0.3rem;
+      .media-stage {
+        width: min(88vw, calc(80svh * 16 / 9));
       }
 
-      .material-tabs {
+      .observation-card {
+        min-height: 3.7rem;
+        padding-block: 0.14rem 0.22rem;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .explore-view {
+        align-content: start;
+      }
+
+      .media-stage {
+        width: 94vw;
+      }
+
+      .observation-card {
+        width: 92vw;
+        min-height: 5.8rem;
+      }
+
+      .teacher-trigger {
+        font-size: 0.82rem;
+      }
+    }
+
+    /* 學生探索介面 */
+    .explore-view {
+      grid-template-rows: auto minmax(0, auto) auto auto;
+      gap: clamp(0.28rem, 0.72vh, 0.52rem);
+      align-content: center;
+    }
+
+    .progress-wrap {
+      gap: 0.28rem;
+    }
+
+    .discovery-heading {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(0.86rem, 1.5vw, 1rem);
+      font-weight: 720;
+      letter-spacing: 0.04em;
+    }
+
+    .progress-dot.completed {
+      border-color: var(--accent);
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(145, 230, 213, 0.22);
+    }
+
+    .progress-dot.current {
+      width: 0.72rem;
+      height: 0.72rem;
+      border-radius: 50%;
+      background: var(--accent-strong);
+      box-shadow: 0 0 0 3px rgba(145, 230, 213, 0.16), 0 0 18px rgba(145, 230, 213, 0.28);
+    }
+
+    .media-stage {
+      width: min(90vw, calc(64svh * 16 / 9), 76rem);
+      max-height: 64svh;
+    }
+
+    .observation-card {
+      min-height: 3.8rem;
+      padding-block: 0.18rem 0.24rem;
+    }
+
+    .student-actions {
+      width: min(90vw, 60rem);
+      min-height: 3.35rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .student-action-group {
+      grid-column: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+    }
+
+    .student-action,
+    .student-action-secondary,
+    .previous-discovery {
+      min-height: 3rem;
+      padding: 0.66rem 1.25rem;
+      border-radius: 999px;
+      font-weight: 760;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .student-action {
+      border: 1px solid rgba(197, 255, 243, 0.62);
+      background: linear-gradient(135deg, var(--accent-strong), #87daca);
+      box-shadow: 0 10px 28px rgba(53, 145, 133, 0.2);
+      color: #06211f;
+    }
+
+    .student-action-secondary,
+    .previous-discovery {
+      border: 1px solid rgba(211, 240, 235, 0.28);
+      background: rgba(216, 242, 237, 0.065);
+      color: var(--ink);
+    }
+
+    .previous-discovery {
+      grid-column: 1;
+      justify-self: start;
+      min-height: 2.45rem;
+      padding: 0.48rem 0.9rem;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .student-action:hover,
+    .student-action-secondary:hover,
+    .previous-discovery:hover {
+      transform: translateY(-1px);
+    }
+
+    .completion-message {
+      grid-column: 1 / -1;
+      width: min(48rem, 100%);
+      margin: 0 auto;
+      padding: 0.82rem 1rem;
+      border: 1px solid rgba(145, 230, 213, 0.3);
+      border-radius: 0.9rem;
+      background: rgba(145, 230, 213, 0.075);
+      color: var(--accent-strong);
+      font-size: clamp(0.92rem, 1.7vw, 1.06rem);
+      font-weight: 680;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .teacher-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding-inline: 0.82rem 1rem;
+    }
+
+    .more-icon {
+      font-size: 1.2rem;
+      line-height: 1;
+      letter-spacing: 0.08em;
+    }
+
+    .teacher-actions {
+      gap: 0.8rem;
+    }
+
+    .discovery-picker {
+      display: grid;
+      gap: 0.55rem;
+      margin: 0;
+      padding: 0.85rem;
+      border: 1px solid var(--line);
+      border-radius: 0.9rem;
+    }
+
+    .discovery-picker legend {
+      padding: 0 0.35rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .discovery-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.42rem;
+    }
+
+    .discovery-choice {
+      min-height: 2.6rem;
+      padding: 0.4rem 0.25rem;
+      border: 1px solid var(--line);
+      border-radius: 0.65rem;
+      background: rgba(216, 242, 237, 0.045);
+      color: var(--ink);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .discovery-choice.current {
+      border-color: var(--accent);
+      background: rgba(145, 230, 213, 0.14);
+      color: var(--accent-strong);
+    }
+
+    .model-action-copy {
+      display: grid;
+      gap: 0.15rem;
+    }
+
+    .model-action-note,
+    .device-note {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 520;
+    }
+
+    .device-note {
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    .restart-action {
+      margin-top: 0.35rem;
+      color: #ffd7d0;
+    }
+
+    .confirm-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 1.2rem;
+      background: rgba(0, 8, 10, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .confirm-dialog {
+      width: min(31rem, 94vw);
+      padding: clamp(1.2rem, 4vw, 1.8rem);
+      border: 1px solid rgba(197, 255, 243, 0.34);
+      border-radius: 1.1rem;
+      background: var(--glass-solid);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    .confirm-dialog p {
+      margin: 0 0 1.35rem;
+      font-size: clamp(1.08rem, 3vw, 1.35rem);
+      font-weight: 720;
+      line-height: 1.55;
+    }
+
+    .confirm-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.7rem;
+    }
+
+    @media (orientation: landscape) and (max-height: 720px) {
+      .media-stage {
+        width: min(88vw, calc(58svh * 16 / 9));
+        max-height: 58svh;
+      }
+
+      .observation-card {
+        min-height: 3.25rem;
+      }
+
+      .student-actions {
+        min-height: 2.8rem;
+      }
+
+      .student-action,
+      .student-action-secondary {
+        min-height: 2.65rem;
+        padding-block: 0.5rem;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .explore-view {
+        min-height: 100svh;
+        align-content: start;
+        gap: 0.5rem;
+        padding-top: max(0.6rem, env(safe-area-inset-top));
+        padding-bottom: max(5.2rem, env(safe-area-inset-bottom));
+      }
+
+      .media-stage {
+        width: 94vw;
+        max-height: none;
+      }
+
+      .observation-card {
+        width: 94vw;
+        min-height: 5rem;
+        padding-inline: 0.35rem;
+      }
+
+      .student-actions {
+        width: 94vw;
+        min-height: 7.2rem;
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .previous-discovery,
+      .student-action-group,
+      .completion-message {
+        grid-column: 1;
+      }
+
+      .previous-discovery {
+        justify-self: center;
+        order: 2;
+      }
+
+      .student-action-group {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .student-action,
+      .student-action-secondary {
+        width: min(22rem, 100%);
+      }
+
+      .completion-message {
+        order: -1;
+      }
+
+      .teacher-trigger {
+        right: max(0.7rem, env(safe-area-inset-right));
+        bottom: max(0.7rem, env(safe-area-inset-bottom));
+      }
+
+      .discovery-choice-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
-      .prompt-panel {
-        grid-template-columns: 1fr;
+      .confirm-actions {
+        flex-direction: column;
+      }
+
+      .confirm-actions button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
 </head>
 <body>
   <main>
-    <header class="page-header">
-      <h1 id="page-title">NFC 1｜看不見的水如何變得可見？</h1>
-      <p id="evidence-progress" class="progress" aria-live="polite">證據 1／5</p>
-    </header>
-
-    <ol class="learning-cycle" aria-label="教學流程">
-      <li id="phase-observe" class="current">觀察</li>
-      <li id="phase-discuss">討論</li>
-      <li id="phase-predict">預測</li>
-      <li id="phase-teacher">老師決定</li>
-      <li id="phase-revise">修正想法</li>
-    </ol>
-
-    <nav class="material-tabs" role="tablist" aria-label="真實證據素材，由老師操作">
-      <button class="material-tab" type="button" role="tab" aria-selected="true" data-index="0">雲</button>
-      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="1" disabled>霧</button>
-      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="2" disabled>露</button>
-      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="3" disabled>霜</button>
-      <button class="material-tab" type="button" role="tab" aria-selected="false" data-index="4" disabled>熱水白色水氣</button>
-    </nav>
-
-    <section class="media-stage" aria-label="主媒體區">
-      <video id="main-video" controls playsinline webkit-playsinline preload="metadata" hidden></video>
-      <img id="main-photo" alt="" hidden>
-      <div id="media-placeholder" class="media-placeholder" role="status">
-        <span class="placeholder-mark" aria-hidden="true">▶</span>
-        <strong id="placeholder-title">雲｜素材尚未放入</strong>
-        <p id="placeholder-message">影片與照片補上後，這裡會自動顯示。</p>
+    <section id="intro-view" class="view intro-view" aria-labelledby="intro-title">
+      <div class="intro-card">
+        <p class="eyebrow">NFC 1 · 自然探索</p>
+        <h1 id="intro-title">看不見的水<br>如何變得可見？</h1>
+        <p class="intro-lead">仔細觀察五個自然現象，描述畫面發生的變化，和同學說說你的發現與預測。</p>
+        <button id="start-exploration" class="primary-action" type="button">開始探索</button>
       </div>
     </section>
 
-    <section class="prompt-panel" aria-label="觀察與思考提示">
-      <article class="prompt-card">
-        <h2 id="prompt-label">觀察提示</h2>
-        <p id="observation-prompt">白色區域從哪裡開始出現？它如何移動或消散？</p>
-      </article>
+    <section id="explore-view" class="view explore-view" aria-label="自然發現探索" hidden>
+      <header class="progress-wrap">
+        <p id="evidence-label" class="discovery-heading">發現 1／5：雲</p>
+        <ol id="progress-dots" class="progress-dots" aria-label="探索進度">
+          <li class="progress-dot current" aria-label="發現 1，目前位置"></li>
+          <li class="progress-dot" aria-label="發現 2"></li>
+          <li class="progress-dot" aria-label="發現 3"></li>
+          <li class="progress-dot" aria-label="發現 4"></li>
+          <li class="progress-dot" aria-label="發現 5"></li>
+        </ol>
+        <p id="model-indicator" class="model-indicator" hidden>概念模型</p>
+      </header>
 
-      <article id="thinking-card" class="prompt-card">
-        <h2 id="thinking-label">討論與預測</h2>
-        <p id="thinking-prompt">先說出畫面中的證據，再預測下一個現象可能出現在空中或物體表面。</p>
-      </article>
-    </section>
+      <section id="media-stage" class="media-stage" aria-label="主影片區">
+        <video id="main-video" controls playsinline webkit-playsinline preload="metadata" hidden></video>
+        <img id="main-photo" alt="" hidden>
+        <div id="media-placeholder" class="media-placeholder" role="status">
+          <span class="placeholder-mark" aria-hidden="true">▶</span>
+          <strong id="placeholder-title">素材正在載入</strong>
+          <p id="placeholder-message">請稍候。</p>
+        </div>
+      </section>
 
-    <section class="controls" aria-label="教師控制">
-      <button id="next-evidence" class="control-button" type="button" disabled>下一個證據</button>
-      <button id="show-model" class="control-button model" type="button">顯示概念模型</button>
-      <button id="rewatch" class="control-button secondary" type="button">重新觀看</button>
-      <p class="teacher-note">先完成觀察、討論與預測，再由老師決定何時顯示下一個證據或概念模型。</p>
+      <section class="observation-card" aria-live="polite">
+        <p id="observation-question" class="observation-question">你覺得天空中的白色部分是什麼？</p>
+        <p id="observation-hint" class="observation-hint">說說你的想法，找出影片中的證據。</p>
+      </section>
+
+      <section id="student-actions" class="student-actions" aria-live="polite">
+        <button id="previous-discovery" class="previous-discovery" type="button" hidden>上一個發現</button>
+
+        <div id="observation-pending-actions" class="student-action-group">
+          <button id="complete-observation" class="student-action" type="button">完成觀察</button>
+        </div>
+
+        <div id="observation-complete-actions" class="student-action-group" hidden>
+          <button id="replay-discovery" class="student-action-secondary" type="button">再看一次</button>
+          <button id="next-discovery" class="student-action" type="button">前往下一個發現</button>
+        </div>
+
+        <p id="collection-complete" class="completion-message" hidden>五個發現已蒐集完成，請回到 LoiLoNote 整理你們的想法，等待老師指示。</p>
+      </section>
     </section>
   </main>
+
+  <button id="teacher-trigger" class="teacher-trigger" type="button" aria-controls="teacher-drawer" aria-expanded="false" hidden>
+    <span class="more-icon" aria-hidden="true">•••</span>
+    <span>更多選項</span>
+  </button>
+  <button id="drawer-scrim" class="drawer-scrim" type="button" aria-label="關閉更多選項" tabindex="-1" hidden></button>
+
+  <aside id="teacher-drawer" class="teacher-drawer" aria-labelledby="teacher-title" aria-hidden="true">
+    <header class="drawer-header">
+      <h2 id="teacher-title">更多選項</h2>
+      <button id="drawer-close" class="drawer-close" type="button" aria-label="關閉更多選項">×</button>
+    </header>
+
+    <nav class="teacher-actions" aria-label="這台裝置的選項">
+      <button id="return-first" class="teacher-action" type="button">回到第一個發現</button>
+
+      <fieldset class="discovery-picker">
+        <legend>選擇任一發現</legend>
+        <div id="discovery-choice-grid" class="discovery-choice-grid">
+          <button class="discovery-choice" type="button" data-discovery-index="0">雲</button>
+          <button class="discovery-choice" type="button" data-discovery-index="1">霧</button>
+          <button class="discovery-choice" type="button" data-discovery-index="2">露</button>
+          <button class="discovery-choice" type="button" data-discovery-index="3">霜</button>
+          <button class="discovery-choice" type="button" data-discovery-index="4">熱水</button>
+        </div>
+      </fieldset>
+
+      <button id="enter-fullscreen" class="teacher-action" type="button">進入全螢幕</button>
+      <button id="show-model" class="teacher-action model" type="button">
+        <span class="model-action-copy">
+          <span>顯示概念模型</span>
+          <span class="model-action-note">請在老師指示後使用</span>
+        </span>
+      </button>
+      <button id="restart-exploration" class="teacher-action restart-action" type="button">重新開始探索</button>
+    </nav>
+
+    <p class="device-note">這些選項只會影響目前這台裝置。</p>
+  </aside>
+
+  <div id="model-confirm-layer" class="confirm-layer" hidden>
+    <section class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="model-confirm-question">
+      <p id="model-confirm-question">老師已經請你們查看概念模型了嗎？</p>
+      <div class="confirm-actions">
+        <button id="model-confirm-no" class="student-action-secondary" type="button">還沒有</button>
+        <button id="model-confirm-yes" class="student-action" type="button">是</button>
+      </div>
+    </section>
+  </div>
 
   <script>
     const evidenceItems = [
@@ -380,65 +973,128 @@
         label: '雲',
         video: '../media/video/cloud.mp4',
         photo: '../media/photo/cloud.jpg',
-        prompt: '白色區域從哪裡開始出現？它如何移動或消散？'
+        prompt: '你覺得天空中的白色部分是什麼？',
+        hint: '說說你的想法，找出影片中的證據。'
       },
       {
         id: 'fog',
         label: '霧',
         video: '../media/video/fog.mp4',
         photo: '../media/photo/fog.jpg',
-        prompt: '遠方景物的清晰度如何改變？白色區域最靠近哪裡？'
+        prompt: '你覺得霧是在空中，還是在地面附近？',
+        hint: '看看霧是怎麼移動、把哪些東西遮住。'
       },
       {
         id: 'dew',
         label: '露',
         video: '../media/video/dew.mp4',
         photo: '../media/photo/dew.jpg',
-        prompt: '水滴最先出現在哪個表面？數量和大小如何改變？'
+        prompt: '這些水滴原本就在葉子上嗎？',
+        hint: '仔細看看水滴是慢慢出現，還是本來就有。'
       },
       {
         id: 'frost',
         label: '霜',
         video: '../media/video/frost.mp4',
         photo: '../media/photo/frost.jpg',
-        prompt: '表面的形狀如何隨時間改變？它和前一個證據有什麼不同？'
+        prompt: '這些白色東西出現在什麼地方？',
+        hint: '看看哪些地方先變白。'
       },
       {
         id: 'kettle',
-        label: '熱水白色水氣',
+        label: '熱水上方的白色現象',
         video: '../media/video/kettle.mp4',
         photo: null,
-        prompt: '壺口最近處和稍遠處，哪裡比較看得見白色區域？'
+        prompt: '你看到的白色東西是在水面上，還是在空氣中？',
+        hint: '注意白色部分從哪裡開始出現。'
       }
     ];
 
     const conceptModel = {
       label: '概念模型',
-      video: '../media/generated/water-visible-model.mp4'
+      video: '../media/generated/water-visible-model.mp4',
+      prompt: '看完後，請回到任一發現，找出你現在才注意到的畫面。'
     };
 
+    const STORAGE_KEY = 'natural-science-nfc1-exploration-v1';
+
+    const introView = document.querySelector('#intro-view');
+    const exploreView = document.querySelector('#explore-view');
+    const startButton = document.querySelector('#start-exploration');
     const mainVideo = document.querySelector('#main-video');
     const mainPhoto = document.querySelector('#main-photo');
+    const mediaStage = document.querySelector('#media-stage');
     const mediaPlaceholder = document.querySelector('#media-placeholder');
     const placeholderTitle = document.querySelector('#placeholder-title');
     const placeholderMessage = document.querySelector('#placeholder-message');
-    const evidenceProgress = document.querySelector('#evidence-progress');
-    const observationPrompt = document.querySelector('#observation-prompt');
-    const promptLabel = document.querySelector('#prompt-label');
-    const thinkingCard = document.querySelector('#thinking-card');
-    const thinkingLabel = document.querySelector('#thinking-label');
-    const thinkingPrompt = document.querySelector('#thinking-prompt');
-    const nextEvidenceButton = document.querySelector('#next-evidence');
+    const evidenceLabel = document.querySelector('#evidence-label');
+    const observationQuestion = document.querySelector('#observation-question');
+    const observationHint = document.querySelector('#observation-hint');
+    const progressDots = [...document.querySelectorAll('.progress-dot')];
+    const progressDotsGroup = document.querySelector('#progress-dots');
+    const modelIndicator = document.querySelector('#model-indicator');
+    const teacherTrigger = document.querySelector('#teacher-trigger');
+    const teacherDrawer = document.querySelector('#teacher-drawer');
+    const drawerScrim = document.querySelector('#drawer-scrim');
+    const drawerClose = document.querySelector('#drawer-close');
     const showModelButton = document.querySelector('#show-model');
-    const rewatchButton = document.querySelector('#rewatch');
-    const materialTabs = [...document.querySelectorAll('.material-tab')];
-    const phaseItems = [...document.querySelectorAll('.learning-cycle li')];
+    const returnFirstButton = document.querySelector('#return-first');
+    const fullscreenButton = document.querySelector('#enter-fullscreen');
+    const restartButton = document.querySelector('#restart-exploration');
+    const discoveryChoices = [...document.querySelectorAll('.discovery-choice')];
+    const studentActions = document.querySelector('#student-actions');
+    const previousDiscoveryButton = document.querySelector('#previous-discovery');
+    const pendingActions = document.querySelector('#observation-pending-actions');
+    const completeActions = document.querySelector('#observation-complete-actions');
+    const completeObservationButton = document.querySelector('#complete-observation');
+    const replayDiscoveryButton = document.querySelector('#replay-discovery');
+    const nextDiscoveryButton = document.querySelector('#next-discovery');
+    const collectionComplete = document.querySelector('#collection-complete');
+    const modelConfirmLayer = document.querySelector('#model-confirm-layer');
+    const modelConfirmNo = document.querySelector('#model-confirm-no');
+    const modelConfirmYes = document.querySelector('#model-confirm-yes');
 
     let currentEvidenceIndex = 0;
     let currentMode = 'evidence';
-    let highestUnlockedEvidenceIndex = 0;
-    let currentVideoCompleted = false;
-    let replayAuthorized = false;
+    let hasStarted = false;
+    let completedDiscoveries = evidenceItems.map(() => false);
+
+    function readStoredProgress() {
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
+        if (!stored || stored.started !== true) {
+          return null;
+        }
+
+        const storedIndex = Number.isInteger(stored.currentIndex) ? stored.currentIndex : 0;
+        return {
+          currentIndex: Math.min(Math.max(storedIndex, 0), evidenceItems.length - 1),
+          completed: evidenceItems.map((_, index) => Boolean(stored.completed?.[index]))
+        };
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function saveProgress() {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+          started: hasStarted,
+          currentIndex: currentEvidenceIndex,
+          completed: completedDiscoveries
+        }));
+      } catch (error) {
+        // sessionStorage 無法使用時，探索功能仍可在目前頁面正常運作。
+      }
+    }
+
+    function clearStoredProgress() {
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch (error) {
+        // 不影響目前頁面的重新開始流程。
+      }
+    }
 
     function stopMedia() {
       mainVideo.pause();
@@ -447,21 +1103,10 @@
       mainPhoto.removeAttribute('src');
       mainVideo.hidden = true;
       mainPhoto.hidden = true;
-      currentVideoCompleted = false;
-      replayAuthorized = false;
-    }
-
-    function setPhase(phaseId) {
-      phaseItems.forEach((item) => {
-        item.classList.toggle('current', item.id === phaseId);
-      });
-    }
-
-    function updateEvidenceTabs(selectedIndex = null) {
-      materialTabs.forEach((tab, tabIndex) => {
-        tab.disabled = tabIndex > highestUnlockedEvidenceIndex;
-        tab.setAttribute('aria-selected', String(tabIndex === selectedIndex));
-      });
+      mainVideo.onloadedmetadata = null;
+      mainVideo.onerror = null;
+      mainPhoto.onload = null;
+      mainPhoto.onerror = null;
     }
 
     function showPlaceholder(title, message) {
@@ -472,189 +1117,311 @@
       mediaPlaceholder.hidden = false;
     }
 
+    function showVideo() {
+      mediaPlaceholder.hidden = true;
+      mainPhoto.hidden = true;
+      mainVideo.hidden = false;
+    }
+
     function tryPhotoFallback(item) {
       if (!item.photo) {
-        showPlaceholder(
-          `${item.label}｜素材尚未放入`,
-          '影片補上後，這裡會自動顯示。'
-        );
-        nextEvidenceButton.disabled = currentEvidenceIndex === evidenceItems.length - 1;
+        showPlaceholder(`${item.label}｜素材尚未放入`, '影片補上後，這裡會自動顯示。');
         return;
       }
 
+      mainPhoto.alt = `${item.label}的發現照片`;
       mainPhoto.onload = () => {
         mainVideo.hidden = true;
         mediaPlaceholder.hidden = true;
         mainPhoto.hidden = false;
-        nextEvidenceButton.disabled = currentEvidenceIndex === evidenceItems.length - 1;
       };
-
       mainPhoto.onerror = () => {
-        showPlaceholder(
-          `${item.label}｜素材尚未放入`,
-          '影片與照片補上後，這裡會自動顯示。'
-        );
-        nextEvidenceButton.disabled = currentEvidenceIndex === evidenceItems.length - 1;
+        showPlaceholder(`${item.label}｜素材尚未放入`, '影片與照片補上後，這裡會自動顯示。');
       };
-
-      mainPhoto.alt = `${item.label}的真實證據照片`;
       mainPhoto.src = item.photo;
     }
 
-    function loadEvidence(index, isNewEvidence = false) {
-      const item = evidenceItems[index];
+    function updateProgress() {
+      const isModel = currentMode === 'model';
+      progressDotsGroup.hidden = isModel;
+      modelIndicator.hidden = !isModel;
+      evidenceLabel.hidden = isModel;
 
-      currentEvidenceIndex = index;
-      currentMode = 'evidence';
-      stopMedia();
+      progressDots.forEach((dot, index) => {
+        const isCurrent = index === currentEvidenceIndex;
+        const isCompleted = completedDiscoveries[index];
+        dot.classList.toggle('current', isCurrent);
+        dot.classList.toggle('completed', isCompleted);
 
-      evidenceProgress.textContent = `${item.label}｜證據 ${index + 1}／${evidenceItems.length}`;
-      promptLabel.textContent = '觀察提示';
-      observationPrompt.textContent = item.prompt;
+        const states = [];
+        if (isCompleted) states.push('已完成');
+        if (isCurrent) states.push('目前位置');
+        dot.setAttribute('aria-label', `發現 ${index + 1}${states.length ? `，${states.join('，')}` : ''}`);
+      });
+    }
 
-      updateEvidenceTabs(index);
+    function updateStudentActions() {
+      const isEvidence = currentMode === 'evidence';
+      const isCompleted = completedDiscoveries[currentEvidenceIndex];
+      const isLastDiscovery = currentEvidenceIndex === evidenceItems.length - 1;
+      const allDiscoveriesCompleted = completedDiscoveries.every(Boolean);
 
-      nextEvidenceButton.disabled = true;
-      const shouldRevise = isNewEvidence || index > 0;
-      thinkingCard.classList.toggle('revision-card', shouldRevise);
-      thinkingLabel.textContent = shouldRevise ? '修正想法' : '討論與預測';
-      thinkingPrompt.textContent = shouldRevise
-        ? '新證據和原來的預測哪裡相同、哪裡不同？請指出畫面中的依據。'
-        : '先說出畫面中的證據，再預測下一個現象可能出現在空中或物體表面。';
-      setPhase(isNewEvidence || index > 0 ? 'phase-revise' : 'phase-observe');
+      studentActions.hidden = !isEvidence;
+      previousDiscoveryButton.hidden = !isEvidence || currentEvidenceIndex === 0;
+      pendingActions.hidden = !isEvidence || isCompleted;
+      completeActions.hidden = !isEvidence || !isCompleted;
+      nextDiscoveryButton.hidden = !isEvidence || !isCompleted || isLastDiscovery;
+      collectionComplete.hidden = !isEvidence || !isLastDiscovery || !allDiscoveriesCompleted;
 
+      discoveryChoices.forEach((choice, index) => {
+        const isCurrent = isEvidence && index === currentEvidenceIndex;
+        choice.classList.toggle('current', isCurrent);
+        choice.setAttribute('aria-current', isCurrent ? 'step' : 'false');
+      });
+
+      showModelButton.disabled = currentMode === 'model';
+    }
+
+    function setMediaSource(source, fallbackItem = null) {
       mainVideo.autoplay = false;
       mainVideo.loop = false;
       mainVideo.controls = true;
-
-      showPlaceholder(`${item.label}｜正在載入`, '如果素材尚未放入，稍後會顯示占位畫面。');
-
-      mainVideo.onloadeddata = () => {
-        mediaPlaceholder.hidden = true;
-        mainPhoto.hidden = true;
-        mainVideo.hidden = false;
-      };
-
+      mainVideo.playsInline = true;
+      mainVideo.onloadedmetadata = showVideo;
       mainVideo.onerror = () => {
-        tryPhotoFallback(item);
+        if (fallbackItem) {
+          tryPhotoFallback(fallbackItem);
+        } else {
+          showPlaceholder('概念模型尚待製作', '請先回看真實證據並修正小組想法。');
+        }
       };
-
-      mainVideo.src = item.video;
+      mainVideo.src = source;
       mainVideo.load();
+    }
+
+    function loadEvidence(index) {
+      const nextIndex = Math.min(Math.max(index, 0), evidenceItems.length - 1);
+      const item = evidenceItems[nextIndex];
+
+      stopMedia();
+      currentEvidenceIndex = nextIndex;
+      currentMode = 'evidence';
+
+      evidenceLabel.textContent = `發現 ${nextIndex + 1}／${evidenceItems.length}：${item.label}`;
+      observationQuestion.textContent = item.prompt;
+      observationHint.textContent = item.hint;
+      observationHint.hidden = false;
+
+      updateProgress();
+      updateStudentActions();
+      saveProgress();
+      showPlaceholder(`${item.label}｜正在載入`, '如果素材尚未放入，稍後會顯示占位畫面。');
+      setMediaSource(item.video, item);
     }
 
     function loadConceptModel() {
-      currentMode = 'model';
       stopMedia();
+      currentMode = 'model';
 
-      evidenceProgress.textContent = '概念模型｜老師決定後顯示';
-      promptLabel.textContent = '回看任務';
-      observationPrompt.textContent = '看完後，請回到任一真實證據，找出你現在才注意到的畫面。';
-      thinkingCard.classList.add('revision-card');
-      thinkingLabel.textContent = '修正想法';
-      thinkingPrompt.textContent = '用新模型重新解釋一個畫面，並說明你修改了哪一個原來的想法。';
-      updateEvidenceTabs();
-      nextEvidenceButton.disabled = true;
-      setPhase('phase-revise');
-      mainVideo.controls = true;
+      evidenceLabel.textContent = conceptModel.label;
+      observationQuestion.textContent = conceptModel.prompt;
+      observationHint.hidden = true;
 
-      showPlaceholder('概念模型｜正在載入', '模型素材尚未放入時，頁面仍可回看真實證據。');
-
-      mainVideo.onloadeddata = () => {
-        mediaPlaceholder.hidden = true;
-        mainPhoto.hidden = true;
-        mainVideo.hidden = false;
-      };
-
-      mainVideo.onerror = () => {
-        showPlaceholder('概念模型尚待製作', '請先回看真實證據並修正小組想法。');
-      };
-
-      mainVideo.src = conceptModel.video;
-      mainVideo.load();
+      updateProgress();
+      updateStudentActions();
+      showPlaceholder('概念模型｜正在載入', '模型素材尚未放入時，頁面仍可回看先前的發現。');
+      setMediaSource(conceptModel.video);
     }
 
-    function rewatchCurrentMedia() {
-      if (!mainVideo.hidden && Number.isFinite(mainVideo.duration)) {
-        replayAuthorized = true;
-        nextEvidenceButton.disabled = true;
-        mainVideo.controls = true;
-        mainVideo.currentTime = 0;
-        const playRequest = mainVideo.play();
+    function openMoreOptions() {
+      teacherDrawer.classList.add('open');
+      drawerScrim.hidden = false;
+      requestAnimationFrame(() => drawerScrim.classList.add('open'));
+      teacherDrawer.setAttribute('aria-hidden', 'false');
+      teacherTrigger.setAttribute('aria-expanded', 'true');
+      drawerClose.focus();
+    }
 
-        if (playRequest) {
-          playRequest.catch(() => {
-            replayAuthorized = false;
-          });
+    function closeMoreOptions({ restoreFocus = true } = {}) {
+      teacherDrawer.classList.remove('open');
+      drawerScrim.classList.remove('open');
+      teacherDrawer.setAttribute('aria-hidden', 'true');
+      teacherTrigger.setAttribute('aria-expanded', 'false');
+      window.setTimeout(() => {
+        if (!teacherDrawer.classList.contains('open')) {
+          drawerScrim.hidden = true;
         }
-
-        return;
-      }
-
-      if (currentMode === 'model') {
-        loadConceptModel();
-      } else {
-        loadEvidence(currentEvidenceIndex, currentEvidenceIndex > 0);
+      }, 190);
+      if (restoreFocus && !teacherTrigger.hidden) {
+        teacherTrigger.focus();
       }
     }
 
-    materialTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        const index = Number(tab.dataset.index);
+    function openModelConfirmation() {
+      closeMoreOptions({ restoreFocus: false });
+      modelConfirmLayer.hidden = false;
+      modelConfirmNo.focus({ preventScroll: true });
+    }
 
-        if (index > highestUnlockedEvidenceIndex) {
+    function closeModelConfirmation({ restoreFocus = true } = {}) {
+      modelConfirmLayer.hidden = true;
+      if (restoreFocus && !teacherTrigger.hidden) {
+        teacherTrigger.focus({ preventScroll: true });
+      }
+    }
+
+    function beginExploration() {
+      hasStarted = true;
+      introView.hidden = true;
+      exploreView.hidden = false;
+      teacherTrigger.hidden = false;
+      currentEvidenceIndex = 0;
+      completedDiscoveries = evidenceItems.map(() => false);
+      loadEvidence(currentEvidenceIndex);
+      mainVideo.focus({ preventScroll: true });
+    }
+
+    function restartExploration() {
+      closeMoreOptions({ restoreFocus: false });
+      clearStoredProgress();
+      hasStarted = true;
+      currentEvidenceIndex = 0;
+      currentMode = 'evidence';
+      completedDiscoveries = evidenceItems.map(() => false);
+      loadEvidence(0);
+      mainVideo.focus({ preventScroll: true });
+    }
+
+    async function enterFullscreen() {
+      closeMoreOptions({ restoreFocus: false });
+
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
           return;
         }
 
-        loadEvidence(index, index !== currentEvidenceIndex || index > 0);
-      });
-    });
+        if (document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+          return;
+        }
 
-    function holdOnFinalFrame() {
-      if (Number.isFinite(mainVideo.duration) && mainVideo.duration > 0) {
-        mainVideo.currentTime = Math.max(0, mainVideo.duration - 0.05);
+        if (document.documentElement.webkitRequestFullscreen) {
+          document.documentElement.webkitRequestFullscreen();
+          return;
+        }
+
+        if (mainVideo.webkitEnterFullscreen && !mainVideo.hidden) {
+          mainVideo.webkitEnterFullscreen();
+        }
+      } catch (error) {
+        mainVideo.focus({ preventScroll: true });
       }
     }
 
-    mainVideo.addEventListener('play', () => {
-      if (currentVideoCompleted && !replayAuthorized) {
-        mainVideo.pause();
-        holdOnFinalFrame();
+    function completeObservation() {
+      completedDiscoveries[currentEvidenceIndex] = true;
+      updateProgress();
+      updateStudentActions();
+      saveProgress();
+
+      if (currentEvidenceIndex === evidenceItems.length - 1 && completedDiscoveries.every(Boolean)) {
+        collectionComplete.focus?.({ preventScroll: true });
+      } else {
+        replayDiscoveryButton.focus({ preventScroll: true });
+      }
+    }
+
+    function replayCurrentDiscovery() {
+      if (mainVideo.hidden) {
+        mediaStage.focus?.({ preventScroll: true });
         return;
       }
 
-      if (replayAuthorized) {
-        replayAuthorized = false;
-        currentVideoCompleted = false;
+      mainVideo.currentTime = 0;
+      const playback = mainVideo.play();
+      if (playback?.catch) {
+        playback.catch(() => mainVideo.focus({ preventScroll: true }));
+      }
+    }
+
+    function restoreExploration() {
+      const restored = readStoredProgress();
+      if (!restored) {
+        return;
       }
 
-      if (currentMode === 'evidence') {
-        nextEvidenceButton.disabled = true;
+      hasStarted = true;
+      currentEvidenceIndex = restored.currentIndex;
+      completedDiscoveries = restored.completed;
+      introView.hidden = true;
+      exploreView.hidden = false;
+      teacherTrigger.hidden = false;
+      loadEvidence(currentEvidenceIndex);
+    }
+
+    startButton.addEventListener('click', beginExploration);
+    completeObservationButton.addEventListener('click', completeObservation);
+    replayDiscoveryButton.addEventListener('click', replayCurrentDiscovery);
+
+    previousDiscoveryButton.addEventListener('click', () => {
+      if (currentEvidenceIndex > 0) {
+        loadEvidence(currentEvidenceIndex - 1);
       }
     });
 
-    mainVideo.addEventListener('ended', () => {
-      currentVideoCompleted = true;
-      mainVideo.controls = false;
-
-      if (currentMode === 'evidence' && currentEvidenceIndex < evidenceItems.length - 1) {
-        nextEvidenceButton.disabled = false;
-        setPhase('phase-teacher');
+    nextDiscoveryButton.addEventListener('click', () => {
+      if (completedDiscoveries[currentEvidenceIndex] && currentEvidenceIndex < evidenceItems.length - 1) {
+        loadEvidence(currentEvidenceIndex + 1);
       }
     });
 
-    nextEvidenceButton.addEventListener('click', () => {
-      if (!nextEvidenceButton.disabled && currentEvidenceIndex < evidenceItems.length - 1) {
-        const nextIndex = currentEvidenceIndex + 1;
-        highestUnlockedEvidenceIndex = Math.max(highestUnlockedEvidenceIndex, nextIndex);
-        loadEvidence(nextIndex, true);
+    teacherTrigger.addEventListener('click', openMoreOptions);
+    drawerClose.addEventListener('click', () => closeMoreOptions());
+    drawerScrim.addEventListener('click', () => closeMoreOptions());
+
+    returnFirstButton.addEventListener('click', () => {
+      loadEvidence(0);
+      closeMoreOptions();
+    });
+
+    discoveryChoices.forEach((choice) => {
+      choice.addEventListener('click', () => {
+        loadEvidence(Number(choice.dataset.discoveryIndex));
+        closeMoreOptions();
+      });
+    });
+
+    showModelButton.addEventListener('click', openModelConfirmation);
+    modelConfirmNo.addEventListener('click', () => closeModelConfirmation());
+    modelConfirmYes.addEventListener('click', () => {
+      closeModelConfirmation({ restoreFocus: false });
+      loadConceptModel();
+      mainVideo.focus({ preventScroll: true });
+    });
+
+    restartButton.addEventListener('click', restartExploration);
+    fullscreenButton.addEventListener('click', enterFullscreen);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+
+      if (!modelConfirmLayer.hidden) {
+        closeModelConfirmation();
+      } else if (teacherDrawer.classList.contains('open')) {
+        closeMoreOptions();
       }
     });
 
-    showModelButton.addEventListener('click', loadConceptModel);
-    rewatchButton.addEventListener('click', rewatchCurrentMedia);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && hasStarted) {
+        mainVideo.pause();
+      }
+    });
 
-    loadEvidence(0);
+    restoreExploration();
   </script>
 </body>
 </html>
