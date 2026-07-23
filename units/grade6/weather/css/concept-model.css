@@ -1,0 +1,851 @@
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  margin: -1px !important;
+  white-space: nowrap !important;
+}
+
+.concept-model {
+  --sun-progress: 0;
+  --vapor-progress: 0;
+  --rise-progress: 0;
+  --cold-progress: 0;
+  --formation-progress: 0;
+  --cloud-progress: 0;
+  --growth-progress: 0;
+  --rain-progress: 0;
+  --return-progress: 0;
+  --summary-progress: 0;
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: #07171c;
+  color: #effbfc;
+  outline: none;
+  isolation: isolate;
+}
+
+.concept-model:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: -5px;
+}
+
+.cycle-scene {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 76% 32%, rgb(147 195 213 / 8%), transparent 32%),
+    linear-gradient(180deg, #173744 0%, #245363 42%, #477985 62%, #1b3e43 63%, #102a2e 100%);
+  filter: saturate(0.82);
+}
+
+.cycle-sky {
+  position: absolute;
+  inset: 0 0 38%;
+  overflow: hidden;
+}
+
+.cycle-cold-zone {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(71 126 168 / 62%), rgb(67 137 168 / 14%) 72%, transparent),
+    radial-gradient(ellipse at 48% 12%, rgb(115 171 205 / 25%), transparent 58%);
+  opacity: var(--cold-progress);
+}
+
+.cycle-sun-energy {
+  position: absolute;
+  z-index: 3;
+  top: 5%;
+  right: 7%;
+  width: 19%;
+  aspect-ratio: 1;
+  opacity: calc((var(--sun-progress) * 0.92) + (var(--return-progress) * 0.35));
+}
+
+.sun-energy-core {
+  position: absolute;
+  inset: 21%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(255 231 173 / 70%), rgb(244 194 111 / 12%) 62%, transparent 74%);
+  filter: blur(1px);
+}
+
+.sun-energy-wave {
+  position: absolute;
+  top: 64%;
+  left: 15%;
+  width: 48%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgb(255 222 163 / 60%), transparent);
+  transform-origin: right center;
+}
+
+.sun-energy-wave--one {
+  transform: rotate(116deg);
+}
+
+.sun-energy-wave--two {
+  top: 72%;
+  left: 31%;
+  width: 42%;
+  transform: rotate(105deg);
+}
+
+.sun-energy-wave--three {
+  top: 54%;
+  left: 2%;
+  width: 50%;
+  transform: rotate(126deg);
+}
+
+.cycle-temperature-label {
+  position: absolute;
+  z-index: 8;
+  color: rgb(226 245 250 / 82%);
+  font-size: clamp(0.48rem, 1.05vw, 0.72rem);
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  opacity: var(--rise-progress);
+}
+
+.cycle-temperature-label--high {
+  top: 14%;
+  left: 5%;
+  color: #c8e9f7;
+}
+
+.cycle-temperature-label--surface {
+  bottom: 8%;
+  left: 5%;
+  color: #f2d7ab;
+}
+
+.cycle-airflow-arrow {
+  position: absolute;
+  z-index: 6;
+  bottom: 7%;
+  left: 42%;
+  color: rgb(171 225 239 / 62%);
+  font-size: clamp(1rem, 3vw, 2.2rem);
+  opacity: var(--rise-progress);
+  transform: translateY(calc((1 - var(--rise-progress)) * 1rem));
+}
+
+.cycle-vapor-layer,
+.cycle-cloud-particles,
+.cycle-rain-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cycle-vapor-layer {
+  z-index: 7;
+}
+
+.cycle-vapor-particle {
+  position: absolute;
+  width: clamp(3px, 0.48vw, 6px);
+  aspect-ratio: 1;
+  border: 1px solid rgb(198 237 248 / 18%);
+  border-radius: 50%;
+  background: rgb(96 192 224 / 58%);
+  box-shadow: 0 0 0.35rem rgb(106 199 229 / 12%);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  will-change: top, left, opacity, transform;
+}
+
+.cycle-cloud {
+  position: absolute;
+  z-index: 5;
+  top: 17%;
+  left: 47%;
+  width: 39%;
+  height: 32%;
+  opacity: calc((var(--formation-progress) * 0.34) + (var(--cloud-progress) * 0.66));
+}
+
+.cloud-haze {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgb(224 240 242 / 38%), rgb(178 211 219 / 14%) 55%, transparent 74%);
+  filter: blur(6px);
+  opacity: calc(var(--cloud-progress) * 0.86);
+}
+
+.cloud-haze--one {
+  inset: 22% 27% 10% 2%;
+}
+
+.cloud-haze--two {
+  inset: 2% 2% 18% 30%;
+}
+
+.cloud-haze--three {
+  inset: 31% 8% 0 22%;
+}
+
+.cycle-cloud-particles {
+  z-index: 2;
+}
+
+.cycle-cloud-droplet {
+  position: absolute;
+  width: clamp(4px, 0.82vw, 10px);
+  aspect-ratio: 1;
+  border: 1px solid rgb(229 250 255 / 42%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 28%, rgb(255 255 255 / 62%) 0 9%, transparent 11%),
+    radial-gradient(circle, #bfe9f1, #6eb4c8 76%);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.25);
+  will-change: opacity, transform;
+}
+
+.cycle-cloud-crystal {
+  position: absolute;
+  width: clamp(5px, 0.92vw, 12px);
+  aspect-ratio: 1;
+  background: linear-gradient(145deg, #e1f5ff, #8bc4e0);
+  clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0 50%);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.25) rotate(-15deg);
+  will-change: opacity, transform;
+}
+
+.cycle-cloud-crystal::after {
+  position: absolute;
+  inset: 29%;
+  background: #4c89a8;
+  clip-path: inherit;
+  content: "";
+  opacity: 0.55;
+}
+
+.cycle-rain-layer {
+  z-index: 4;
+}
+
+.cycle-raindrop {
+  position: absolute;
+  top: 39%;
+  width: clamp(1px, 0.18vw, 2px);
+  height: clamp(8px, 1.4vw, 15px);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgb(201 235 245 / 22%), rgb(138 209 232 / 88%));
+  opacity: 0;
+  transform: rotate(3deg);
+  will-change: top, opacity;
+}
+
+.cycle-melt-note {
+  position: absolute;
+  z-index: 8;
+  top: 48%;
+  right: 7%;
+  max-width: 30%;
+  margin: 0;
+  color: rgb(211 235 241 / 72%);
+  font-size: clamp(0.42rem, 0.92vw, 0.64rem);
+  line-height: 1.4;
+  opacity: var(--rain-progress);
+  text-align: right;
+}
+
+.cycle-ground {
+  position: absolute;
+  z-index: 3;
+  inset: 62% 0 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, #263f3b 0%, #1a322f 48%, #102522 100%);
+}
+
+.cycle-soil {
+  position: absolute;
+  z-index: 1;
+  inset: 46% 0 0;
+  background:
+    radial-gradient(circle at 18% 34%, rgb(132 156 130 / 12%) 0 2px, transparent 3px),
+    radial-gradient(circle at 63% 58%, rgb(132 156 130 / 10%) 0 2px, transparent 3px),
+    linear-gradient(180deg, #24372f, #172820);
+}
+
+.cycle-land {
+  position: absolute;
+  z-index: 3;
+  inset: 0 31% 28% 0;
+  background: linear-gradient(180deg, #44635a, #2c4d45 70%, #243f39);
+  clip-path: polygon(0 34%, 13% 28%, 27% 38%, 39% 17%, 54% 35%, 69% 21%, 82% 34%, 100% 52%, 100% 100%, 0 100%);
+}
+
+.land-ridge {
+  position: absolute;
+  bottom: 0;
+  width: 46%;
+  height: 64%;
+  background: linear-gradient(145deg, rgb(91 127 112 / 72%), rgb(39 73 64 / 65%));
+  clip-path: polygon(0 100%, 48% 2%, 100% 100%);
+  opacity: 0.62;
+}
+
+.land-ridge--one {
+  left: 6%;
+}
+
+.land-ridge--two {
+  right: 3%;
+  height: 48%;
+  opacity: 0.42;
+}
+
+.cycle-water {
+  position: absolute;
+  z-index: 4;
+  inset: 24% 0 0 59%;
+  background:
+    repeating-linear-gradient(176deg, transparent 0 10px, rgb(173 226 235 / 9%) 11px 12px),
+    linear-gradient(180deg, #376e7c, #1f5867 70%, #174653);
+  clip-path: polygon(11% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.cycle-river {
+  position: absolute;
+  z-index: 5;
+  top: 30%;
+  left: 31%;
+  width: 39%;
+  height: 29%;
+  background: linear-gradient(90deg, #3e7680, #2d6977);
+  clip-path: polygon(0 23%, 38% 0, 100% 48%, 100% 75%, 36% 31%, 0 72%);
+}
+
+.cycle-plant {
+  position: absolute;
+  z-index: 5;
+  bottom: 12%;
+  width: 2px;
+  height: 18%;
+  background: #82a389;
+}
+
+.cycle-plant::before,
+.cycle-plant::after {
+  position: absolute;
+  top: 21%;
+  width: 220%;
+  height: 40%;
+  border-radius: 100% 0;
+  background: #6e9b7c;
+  content: "";
+}
+
+.cycle-plant::before {
+  right: 55%;
+  transform: rotate(32deg);
+}
+
+.cycle-plant::after {
+  left: 55%;
+  transform: scaleX(-1) rotate(32deg);
+}
+
+.cycle-plant--one {
+  left: 18%;
+}
+
+.cycle-plant--two {
+  left: 40%;
+  height: 23%;
+}
+
+.cycle-plant--three {
+  left: 52%;
+  height: 16%;
+}
+
+.cycle-runoff-arrow,
+.cycle-infiltration {
+  position: absolute;
+  z-index: 8;
+  color: rgb(148 211 224 / 72%);
+  font-size: clamp(0.75rem, 2vw, 1.45rem);
+  opacity: var(--return-progress);
+}
+
+.cycle-runoff-arrow {
+  top: 27%;
+  left: 49%;
+  transform: rotate(18deg);
+}
+
+.cycle-infiltration {
+  top: 48%;
+}
+
+.cycle-infiltration--one {
+  left: 22%;
+}
+
+.cycle-infiltration--two {
+  left: 43%;
+}
+
+.cycle-loop-arrow {
+  position: absolute;
+  z-index: 9;
+  inset: 12% 6% 7%;
+  border: 1px solid rgb(139 216 224 / 28%);
+  border-radius: 50%;
+  opacity: var(--return-progress);
+  pointer-events: none;
+}
+
+.loop-arrow-side {
+  position: absolute;
+  color: rgb(162 227 231 / 76%);
+  font-size: clamp(1rem, 2.8vw, 2rem);
+}
+
+.loop-arrow-side--left {
+  bottom: 33%;
+  left: -0.4em;
+}
+
+.loop-arrow-side--right {
+  top: 28%;
+  right: -0.4em;
+}
+
+.cycle-stage-copy {
+  position: absolute;
+  z-index: 12;
+  top: 5%;
+  left: 50%;
+  width: min(76%, 46rem);
+  padding: 0.2rem 0.55rem;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.cycle-stage-copy p {
+  margin: 0;
+  text-shadow: 0 2px 10px rgb(0 8 12 / 68%);
+}
+
+#cycle-stage-title {
+  color: #f0fbfc;
+  font-size: clamp(0.68rem, 1.75vw, 1.2rem);
+  font-weight: 720;
+  line-height: 1.35;
+}
+
+#cycle-stage-note {
+  margin-top: 0.16em;
+  color: rgb(214 235 237 / 76%);
+  font-size: clamp(0.45rem, 1.05vw, 0.72rem);
+  line-height: 1.4;
+}
+
+.cycle-symbol-note {
+  position: absolute;
+  z-index: 12;
+  right: 2.5%;
+  bottom: 2.8%;
+  max-width: 50%;
+  margin: 0;
+  color: rgb(204 230 235 / 66%);
+  font-size: clamp(0.42rem, 0.9vw, 0.63rem);
+  line-height: 1.35;
+  text-align: right;
+  opacity: clamp(0, calc(var(--vapor-progress) + var(--rise-progress) + var(--formation-progress)), 1);
+}
+
+.cycle-summary {
+  position: absolute;
+  z-index: 20;
+  inset: 4% 5%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(9rem, 0.8fr);
+  grid-template-rows: auto 1fr;
+  gap: 0.4rem 1rem;
+  padding: 2.5%;
+  border: 1px solid rgb(190 232 235 / 18%);
+  border-radius: clamp(0.55rem, 1.2vw, 1rem);
+  background:
+    radial-gradient(ellipse at 36% 52%, rgb(86 157 170 / 14%), transparent 52%),
+    rgb(5 20 25 / 94%);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 34%);
+  opacity: var(--summary-progress);
+  pointer-events: none;
+  transform: translateY(calc((1 - var(--summary-progress)) * 0.7rem));
+}
+
+.cycle-summary h3 {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #eefbfc;
+  font-size: clamp(0.68rem, 1.65vw, 1.12rem);
+  text-align: center;
+}
+
+.cycle-summary-ring {
+  position: relative;
+  min-height: 0;
+}
+
+.summary-ring-line {
+  position: absolute;
+  inset: 11% 15%;
+  border: 1px solid rgb(132 213 219 / 34%);
+  border-radius: 50%;
+}
+
+.summary-node {
+  position: absolute;
+  display: grid;
+  min-width: 18%;
+  min-height: 17%;
+  place-items: center;
+  padding: 0.18rem 0.3rem;
+  border: 1px solid rgb(165 222 224 / 22%);
+  border-radius: 0.55rem;
+  background: rgb(14 48 54 / 94%);
+  color: #dff4f4;
+  font-size: clamp(0.43rem, 0.92vw, 0.66rem);
+  font-weight: 650;
+  line-height: 1.25;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.summary-node--one {
+  top: 82%;
+  left: 17%;
+}
+
+.summary-node--two {
+  top: 44%;
+  left: 10%;
+}
+
+.summary-node--three {
+  top: 13%;
+  left: 36%;
+}
+
+.summary-node--four {
+  top: 17%;
+  left: 73%;
+}
+
+.summary-node--five {
+  top: 58%;
+  left: 89%;
+}
+
+.summary-node--six {
+  top: 87%;
+  left: 58%;
+}
+
+.summary-arrow {
+  position: absolute;
+  color: #8bd8dc;
+  font-size: clamp(0.8rem, 1.8vw, 1.3rem);
+  transform-origin: center;
+}
+
+.summary-arrow--one {
+  top: 55%;
+  left: 11%;
+  transform: rotate(-105deg);
+}
+
+.summary-arrow--two {
+  top: 21%;
+  left: 21%;
+  transform: rotate(-48deg);
+}
+
+.summary-arrow--three {
+  top: 7%;
+  left: 55%;
+}
+
+.summary-arrow--four {
+  top: 32%;
+  right: 8%;
+  transform: rotate(58deg);
+}
+
+.summary-arrow--five {
+  right: 18%;
+  bottom: 8%;
+  transform: rotate(128deg);
+}
+
+.summary-arrow--six {
+  bottom: 3%;
+  left: 36%;
+  transform: rotate(180deg);
+}
+
+.cycle-weather-link {
+  align-self: center;
+  margin: 0;
+  padding: 0.8rem;
+  border-left: 2px solid rgb(143 219 216 / 48%);
+  color: #c7e8e7;
+  font-size: clamp(0.5rem, 1.1vw, 0.78rem);
+  line-height: 1.55;
+}
+
+.concept-model-controls {
+  width: min(92vw, 64rem);
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  margin-inline: auto;
+}
+
+.cycle-stage-progress {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+}
+
+#cycle-current-stage {
+  margin: 0;
+  color: #dff4f2;
+  font-size: clamp(0.72rem, 1.35vw, 0.86rem);
+  font-weight: 700;
+}
+
+#cycle-progress-dots {
+  display: flex;
+  gap: 0.42rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#cycle-progress-dots li {
+  width: 0.48rem;
+  height: 0.48rem;
+  border: 1px solid rgb(178 218 213 / 44%);
+  border-radius: 50%;
+  background: transparent;
+}
+
+#cycle-progress-dots li.current {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  box-shadow: 0 0 0 3px rgb(145 230 213 / 11%);
+}
+
+#cycle-progress-dots li.completed {
+  border-color: var(--accent);
+  background: rgb(145 230 213 / 52%);
+}
+
+.model-control-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.model-control {
+  min-width: 6.6rem;
+  min-height: 2.6rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid rgb(169 222 214 / 34%);
+  border-radius: 999px;
+  background: rgb(17 53 56 / 82%);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.model-control--primary {
+  border-color: rgb(145 230 213 / 54%);
+  background: var(--accent);
+  color: #062522;
+}
+
+.model-control:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.model-control:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.cycle-evidence-links {
+  width: min(100%, 52rem);
+  padding: 0.75rem;
+  border: 1px solid rgb(178 222 218 / 15%);
+  border-radius: 0.8rem;
+  background: rgb(7 27 30 / 72%);
+}
+
+.cycle-evidence-links h3 {
+  margin: 0 0 0.55rem;
+  color: #e6f7f5;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.cycle-evidence-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.cycle-evidence-buttons button {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgb(151 213 205 / 30%);
+  border-radius: 999px;
+  background: rgb(19 61 63 / 72%);
+  color: #e5f6f4;
+  cursor: pointer;
+}
+
+.cycle-evidence-buttons button.selected {
+  border-color: var(--accent);
+  background: rgb(49 110 105 / 78%);
+}
+
+.cycle-evidence-prompt {
+  min-height: 2.8rem;
+  margin: 0.65rem 0 0;
+  color: #bedbd8;
+  font-size: clamp(0.72rem, 1.3vw, 0.84rem);
+  line-height: 1.55;
+  text-align: center;
+}
+
+.model-teaching-tip {
+  width: min(100%, 46rem);
+  border: 1px solid rgb(189 226 220 / 13%);
+  border-radius: 0.7rem;
+  background: rgb(7 24 27 / 44%);
+  color: var(--muted);
+  font-size: clamp(0.72rem, 1.35vw, 0.84rem);
+}
+
+.model-teaching-tip summary {
+  padding: 0.58rem 0.85rem;
+  color: rgb(210 235 232 / 78%);
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.model-teaching-tip ol {
+  margin: 0;
+  padding: 0 1.2rem 0.8rem 2.25rem;
+  line-height: 1.65;
+}
+
+.explore-view.concept-mode {
+  height: auto;
+  min-height: 100svh;
+  align-content: start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: max(5rem, env(safe-area-inset-bottom));
+}
+
+.concept-mode .media-stage {
+  width: min(92vw, calc(62svh * 16 / 9), 78rem);
+  max-height: none;
+}
+
+.concept-mode .observation-card {
+  display: none;
+}
+
+@media (max-width: 620px) {
+  .concept-mode .media-stage,
+  .concept-model-controls {
+    width: 94vw;
+  }
+
+  .cycle-stage-copy {
+    top: 3%;
+    width: 86%;
+  }
+
+  .model-control {
+    min-width: 5.5rem;
+    min-height: 2.45rem;
+    padding-inline: 0.72rem;
+    font-size: 0.78rem;
+  }
+
+  .cycle-summary {
+    inset: 3%;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 0.18rem;
+  }
+
+  .cycle-weather-link {
+    padding: 0.25rem 0.45rem;
+    border-left: 0;
+    border-top: 1px solid rgb(143 219 216 / 34%);
+    text-align: center;
+  }
+
+  .summary-node {
+    min-width: 21%;
+    font-size: 0.38rem;
+  }
+
+  .cycle-evidence-buttons button {
+    font-size: 0.74rem;
+  }
+}
+
+@media (max-height: 620px) and (orientation: landscape) {
+  .concept-mode .media-stage {
+    width: min(84vw, calc(58svh * 16 / 9));
+  }
+
+  .concept-model-controls {
+    gap: 0.35rem;
+  }
+
+  .model-control {
+    min-height: 2.35rem;
+    padding-block: 0.38rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .concept-model *,
+  .model-control {
+    transition: none !important;
+  }
+}

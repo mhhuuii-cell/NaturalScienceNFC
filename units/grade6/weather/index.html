@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <title>開始探索</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/intro.css">
+  <script src="js/intro.js" defer></script>
+</head>
+<body>
+  <main class="intro" aria-label="開場動畫">
+    <div class="sky sky-layer" aria-hidden="true"></div>
+
+    <div class="cloud-scene cloud-layer" aria-hidden="true">
+      <svg class="cloud cloud--one" viewBox="0 0 480 150">
+        <path class="cloud-shape" d="M18 105C39 89 61 88 82 91C95 69 124 57 151 65C168 38 204 29 232 46C250 25 286 24 310 45C328 35 359 40 374 60C402 55 429 68 437 89C454 91 469 101 472 114C450 125 424 129 397 127C366 138 330 135 301 130C267 141 228 137 198 132C160 141 118 135 91 130C59 135 31 127 15 116C12 112 13 108 18 105Z"/>
+      </svg>
+      <svg class="cloud cloud--two" viewBox="0 0 500 132">
+        <path class="cloud-shape" d="M10 91C36 77 66 78 91 83C111 64 143 57 171 66C195 43 234 39 263 55C287 38 325 40 346 58C375 50 410 59 425 78C457 78 482 88 490 101C466 112 432 115 402 111C371 122 330 119 300 113C266 123 225 119 195 113C153 122 112 116 84 110C54 114 26 107 10 98C7 96 7 93 10 91Z"/>
+      </svg>
+      <svg class="cloud cloud--three" viewBox="0 0 430 158">
+        <path class="cloud-shape" d="M15 113C32 96 57 90 80 94C89 73 113 60 138 64C151 40 183 31 207 45C227 24 263 24 285 45C307 36 337 43 349 63C374 62 399 76 405 96C419 101 426 110 423 119C402 132 374 135 350 130C324 143 289 140 264 134C234 144 199 140 175 135C145 144 109 138 87 132C57 138 28 130 14 120C11 117 11 115 15 113Z"/>
+      </svg>
+    </div>
+
+    <div class="sunlight-layer" aria-hidden="true">
+      <div class="sunlight">
+        <span class="sun-core"></span>
+      </div>
+    </div>
+
+    <div class="rain-layer" aria-hidden="true"></div>
+
+    <div class="mist-layer" aria-hidden="true">
+      <span class="mist-band mist-band--one"></span>
+      <span class="mist-band mist-band--two"></span>
+      <span class="mist-band mist-band--three"></span>
+    </div>
+
+    <div class="water-stage" aria-hidden="true">
+      <div class="water-surface"></div>
+
+      <span class="ripple-ring ripple-ring--one"></span>
+      <span class="ripple-ring ripple-ring--two"></span>
+      <span class="ripple-ring ripple-ring--three"></span>
+      <span class="ripple-ring ripple-ring--four"></span>
+
+      <svg class="water-splash" viewBox="0 0 160 70">
+        <path class="water-splash-body" d="M8 59C27 57 39 52 47 42C54 33 58 20 63 9C67 28 74 39 82 45C91 39 98 27 102 16C106 36 115 51 152 58C125 65 38 66 8 59Z"/>
+        <path class="water-splash-highlight" d="M28 57C51 53 58 43 63 29M96 52C102 45 104 37 104 29"/>
+      </svg>
+
+      <svg class="water-drop" viewBox="0 0 80 112">
+        <defs>
+          <linearGradient id="water-drop-fill" x1="20" y1="16" x2="61" y2="101" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#e4f7fd" stop-opacity="0.98"/>
+            <stop offset="0.55" stop-color="#b9e3f0" stop-opacity="0.95"/>
+            <stop offset="1" stop-color="#8bc7dc" stop-opacity="0.9"/>
+          </linearGradient>
+        </defs>
+        <path class="water-drop-body" d="M40 4C36 21 12 49 12 73C12 94 24 107 40 107C57 107 68 94 68 73C68 49 44 21 40 4Z"/>
+        <path class="water-drop-highlight" d="M27 43C22 52 20 61 21 69"/>
+      </svg>
+    </div>
+
+    <section class="intro-content text-layer">
+      <div class="narration" aria-label="旁白">
+        <p class="narration-line narration-line--one">你一定看過它們。</p>
+        <p class="narration-line narration-line--two">但你真的了解它們嗎？</p>
+      </div>
+      <button class="start-button" id="start-exploration" type="button">
+        開始探索
+      </button>
+    </section>
+
+    <output class="intro-debug" id="intro-debug" hidden></output>
+  </main>
+
+  <section
+    class="activation-screen"
+    id="activation-screen"
+    role="button"
+    tabindex="0"
+    aria-label="輕觸，啟動探索"
+  >
+    <div class="activation-content">
+      <svg class="activation-drop" viewBox="0 0 80 112" aria-hidden="true">
+        <defs>
+          <linearGradient id="activation-drop-fill" x1="20" y1="16" x2="61" y2="101" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#e4f7fd" stop-opacity="0.96"/>
+            <stop offset="0.55" stop-color="#b9e3f0" stop-opacity="0.92"/>
+            <stop offset="1" stop-color="#8bc7dc" stop-opacity="0.88"/>
+          </linearGradient>
+        </defs>
+        <path class="activation-drop-body" d="M40 4C36 21 12 49 12 73C12 94 24 107 40 107C57 107 68 94 68 73C68 49 44 21 40 4Z"/>
+        <path class="activation-drop-highlight" d="M27 43C22 52 20 61 21 69"/>
+      </svg>
+      <p class="activation-prompt">輕觸，啟動探索</p>
+      <p class="activation-error" id="activation-error" hidden aria-live="polite">
+        請再輕觸一次以開啟聲音
+      </p>
+    </div>
+  </section>
+
+  <aside class="audio-debug-panel" id="audio-debug-panel" hidden aria-label="音訊除錯資訊">
+    <strong>Audio debug</strong>
+    <pre id="audio-debug-status"></pre>
+    <div class="audio-debug-actions">
+      <button type="button" data-audio-test="drop">測試水滴聲</button>
+      <button type="button" data-audio-test="wind">測試風聲</button>
+      <button type="button" data-audio-test="birds">測試鳥叫</button>
+    </div>
+  </aside>
+
+  <audio id="audio-drop" preload="auto" src="media/audio/drop.mp3"></audio>
+  <audio id="audio-wind" preload="auto" src="media/audio/wind.mp3" loop></audio>
+  <audio id="audio-birds" preload="auto" src="media/audio/birds.mp3" loop></audio>
+</body>
+</html>
