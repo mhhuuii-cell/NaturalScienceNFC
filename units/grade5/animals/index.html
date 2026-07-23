@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>動物單元｜自然探索</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/intro.css">
+</head>
+<body>
+  <main class="intro-shell">
+    <div class="intro-stage" id="introStage" aria-label="動物單元自然探索開場">
+      <!--
+        每個 data-media-slot 都是未來真實影片的替換位置。
+        目前不載入不存在的影片，避免網頁發生 404；參考分鏡實景圖只作流程占位。
+      -->
+
+      <section
+        class="scene scene-01"
+        data-scene="1"
+        data-media-slot="media/intro/scene-01-predawn-forest.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-frame frame-01" role="img" aria-label="黎明前安靜的自然環境"></div>
+        <div class="atmosphere atmosphere-night" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-02"
+        data-scene="2"
+        data-media-slot="media/intro/scene-02-dawn-light.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-frame frame-02" role="img" aria-label="晨光慢慢照進樹林"></div>
+        <div class="atmosphere atmosphere-mist" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-03"
+        data-scene="3"
+        data-media-slot="media/intro/scene-03-shorebird-tracks.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-frame frame-03" role="img" aria-label="泥沙上留下的一串足跡"></div>
+        <div class="foreground-shadow foreground-leaf" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-04"
+        data-scene="4"
+        data-media-slot="media/intro/scene-04-feather.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-frame frame-04" role="img" aria-label="自然環境中隨風移動的羽毛"></div>
+        <div class="atmosphere atmosphere-backlight" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-05"
+        data-scene="5"
+        data-media-slot="media/intro/scene-05-grass-and-ants.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-frame frame-05" role="img" aria-label="低處草叢發生細微晃動"></div>
+        <div class="foreground-shadow foreground-grass" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-06"
+        data-scene="6"
+        data-media-slot="media/intro/scene-06-betta-among-plants.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-frame frame-06" role="img" aria-label="水草附近的水面泛起漣漪"></div>
+        <div class="water-reflection" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-07"
+        data-scene="7"
+        data-media-slot="media/intro/scene-07-butterfly-on-flower.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-detail detail-butterfly" role="img" aria-label="花朵附近出現蝴蝶活動的線索"></div>
+        <div class="atmosphere atmosphere-backlight" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-08"
+        data-scene="8"
+        data-media-slot-a="media/intro/scene-08a-turtle-basking.mp4"
+        data-media-slot-b="media/intro/scene-08b-plover-near-nest.mp4"
+        aria-hidden="true"
+      >
+        <div class="behavior-shot storyboard-detail detail-turtle" role="img" aria-label="石頭附近一隻烏龜安靜停留"></div>
+        <div class="behavior-shot storyboard-detail detail-plover" role="img" aria-label="遠處的小型鳥反覆停留在同一區域"></div>
+        <div class="foreground-shadow foreground-branch" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-09"
+        data-scene="9"
+        data-media-slot="media/intro/scene-09-plovers-together.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-detail detail-group" role="img" aria-label="自然環境中動物一起活動的線索"></div>
+        <div class="atmosphere atmosphere-soft" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-10"
+        data-scene="10"
+        data-media-slot="media/intro/scene-10-calm-environment.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-frame frame-02 quiet-return" role="img" aria-label="恢復安靜的自然環境"></div>
+        <div class="atmosphere atmosphere-calm" aria-hidden="true"></div>
+      </section>
+
+      <section
+        class="scene scene-11"
+        data-scene="11"
+        data-media-slot="media/intro/scene-11-calm-environment.mp4"
+        aria-hidden="true"
+      >
+        <div class="scene-visual storyboard-frame frame-02 question-background" role="img" aria-label="安靜的晨間樹林"></div>
+        <div class="question-layer">
+          <p>你發現了什麼？</p>
+        </div>
+      </section>
+
+      <section class="scene scene-12" data-scene="12" aria-hidden="true">
+        <div class="field-notebook">
+          <span class="notebook-light" aria-hidden="true"></span>
+          <p>你想知道什麼？</p>
+          <span class="writing-line" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <button
+        class="sound-toggle"
+        id="soundToggle"
+        type="button"
+        aria-label="開啟自然環境音"
+        aria-pressed="false"
+      >環境音：待啟動</button>
+
+      <div class="prototype-meta" aria-live="polite" hidden>
+        <span>流程檢查</span>
+        <span id="sceneStatus">準備播放</span>
+      </div>
+
+      <div class="prototype-progress" aria-hidden="true" hidden>
+        <span id="progressBar"></span>
+      </div>
+
+      <div class="prototype-controls" aria-label="流程檢查控制" hidden>
+        <button type="button" id="previousScene" aria-label="上一個場景">上一幕</button>
+        <button type="button" id="togglePlayback" aria-label="暫停動畫">暫停</button>
+        <button type="button" id="nextScene" aria-label="下一個場景">下一幕</button>
+        <button type="button" id="replayIntro" aria-label="從頭重播">重播</button>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="js/intro.js"></script>
+</body>
+</html>

@@ -1,0 +1,748 @@
+:root {
+  color-scheme: dark;
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: #020504;
+  color: #f2f1ea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #020504;
+}
+
+button {
+  font: inherit;
+}
+
+.intro-shell,
+.intro-stage,
+.scene {
+  width: 100%;
+  height: 100dvh;
+  min-height: 420px;
+}
+
+.intro-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #020504;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 1350ms cubic-bezier(.4, 0, .2, 1),
+    filter 1350ms cubic-bezier(.4, 0, .2, 1);
+}
+
+.scene::before {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(3, 8, 6, .44) 0,
+      rgba(3, 8, 6, .28) 16%,
+      rgba(3, 8, 6, .1) 31%,
+      transparent 48%,
+      transparent 58%,
+      rgba(3, 8, 6, .08) 72%,
+      rgba(3, 8, 6, .28) 86%,
+      rgba(2, 5, 4, .48) 100%
+    ),
+    radial-gradient(ellipse at 50% 46%, transparent 24%, rgba(10, 22, 14, .12) 60%, rgba(0, 4, 2, .56) 112%);
+}
+
+.scene::after {
+  position: absolute;
+  z-index: 5;
+  inset: -35%;
+  content: "";
+  pointer-events: none;
+  opacity: .09;
+  background-image:
+    repeating-radial-gradient(circle at 30% 40%, rgba(255, 255, 255, .11) 0 1px, transparent 1px 5px);
+  background-size: 8px 8px;
+  mix-blend-mode: soft-light;
+  animation: quiet-grain 13s steps(8) infinite;
+}
+
+.scene.is-active {
+  z-index: 2;
+  visibility: visible;
+  opacity: 1;
+}
+
+.scene.is-leaving {
+  z-index: 1;
+  visibility: visible;
+  opacity: 0;
+  filter: brightness(.72);
+}
+
+.scene-visual,
+.behavior-shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #101a14;
+  background-repeat: no-repeat;
+  filter: saturate(.9) contrast(.97) brightness(.93);
+  will-change: transform, opacity, filter;
+  overflow: hidden;
+}
+
+.scene-visual > video,
+.behavior-shot > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #050806;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/*
+ * 現階段以使用者提供的分鏡實景圖作低解析度流程占位。
+ * 真實影片到位後，替換 HTML 中的 data-media-slot 即可，不需重做時間軸。
+ */
+.storyboard-frame,
+.storyboard-detail {
+  background-image: none;
+  background-color: #050806;
+}
+
+.storyboard-frame {
+  background-size: 330% 440%;
+}
+
+.frame-01 {
+  background-position: 0 0;
+}
+
+.frame-02 {
+  background-position: 50% 0;
+}
+
+.frame-03 {
+  background-position: 100% 0;
+}
+
+.frame-04 {
+  background-position: 0 33.333%;
+}
+
+.frame-05 {
+  background-position: 50% 33.333%;
+}
+
+.frame-06 {
+  background-position: 100% 33.333%;
+}
+
+.storyboard-detail {
+  background-size: 930% auto;
+}
+
+.detail-butterfly {
+  background-position: 36.2% 65.6%;
+}
+
+.detail-turtle {
+  background-position: 60.5% 61%;
+}
+
+.detail-plover {
+  background-position: 36.2% 61%;
+}
+
+.detail-group {
+  background-position: 48.2% 61%;
+}
+
+.scene.is-active .scene-visual {
+  animation: student-look 8s cubic-bezier(.2, .68, .25, 1) both;
+}
+
+.scene-01.is-active .scene-visual {
+  animation:
+    predawn-reveal 6s ease-in-out both,
+    student-look 7s ease-out both;
+}
+
+.scene-02.is-active .scene-visual {
+  animation:
+    dawn-reveal 6s ease-in-out both,
+    student-look-right 7s ease-out both;
+}
+
+.scene-03.is-active .scene-visual,
+.scene-04.is-active .scene-visual,
+.scene-05.is-active .scene-visual,
+.scene-06.is-active .scene-visual,
+.scene-07.is-active .scene-visual {
+  animation-duration: 4.4s;
+}
+
+.scene-03.is-active .scene-visual {
+  animation-name: kneel-and-notice;
+}
+
+.scene-04.is-active .scene-visual {
+  animation-name: follow-feather;
+}
+
+.scene-05.is-active .scene-visual {
+  animation-name: watch-the-grass;
+}
+
+.scene-06.is-active .scene-visual {
+  animation-name: watch-the-water;
+}
+
+.scene-07.is-active .scene-visual {
+  animation-name: find-the-butterfly;
+}
+
+.atmosphere,
+.foreground-shadow,
+.water-reflection {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+.atmosphere-night {
+  background:
+    radial-gradient(circle at 23% 55%, rgba(185, 204, 100, .15) 0 2px, transparent 3px),
+    radial-gradient(circle at 72% 62%, rgba(185, 204, 100, .14) 0 2px, transparent 3px),
+    linear-gradient(rgba(0, 3, 3, .44), rgba(0, 8, 5, .15));
+  animation: night-breathe 6s ease-in-out both;
+}
+
+.atmosphere-mist {
+  inset: 48% -18% -20%;
+  background:
+    radial-gradient(ellipse at 20% 58%, rgba(215, 225, 207, .22), transparent 48%),
+    radial-gradient(ellipse at 70% 35%, rgba(207, 222, 208, .18), transparent 45%);
+  filter: blur(28px);
+  animation: mist-drift 7s ease-in-out both;
+}
+
+.atmosphere-backlight {
+  background:
+    radial-gradient(circle at 18% 15%, rgba(255, 230, 168, .22), transparent 28%),
+    linear-gradient(110deg, rgba(255, 225, 157, .09), transparent 40%);
+  mix-blend-mode: screen;
+}
+
+.atmosphere-soft {
+  background: linear-gradient(105deg, rgba(0, 10, 5, .36), transparent 48%, rgba(240, 222, 171, .08));
+}
+
+.atmosphere-calm {
+  background: rgba(1, 8, 5, .2);
+  animation: calm-down 5s ease-in-out both;
+}
+
+.foreground-leaf {
+  inset: auto auto 2% -4%;
+  width: 48%;
+  height: 45%;
+  transform: rotate(-7deg);
+  border-radius: 8% 80% 12% 72%;
+  background: rgba(14, 22, 10, .7);
+  filter: blur(16px);
+  animation: leaf-moves-aside 4s ease-in-out both;
+}
+
+.foreground-grass {
+  inset: auto -10% -20% -10%;
+  height: 68%;
+  opacity: .66;
+  background:
+    repeating-linear-gradient(78deg, transparent 0 6%, rgba(13, 38, 15, .6) 6.5% 8%, transparent 8.5% 13%);
+  filter: blur(7px);
+  transform-origin: 50% 100%;
+  animation: foreground-grass-moves 4s ease-in-out both;
+}
+
+.foreground-branch {
+  inset: -8% auto auto -8%;
+  width: 52%;
+  height: 28%;
+  transform: rotate(7deg);
+  border-radius: 0 0 90% 20%;
+  background: rgba(10, 24, 11, .58);
+  filter: blur(20px);
+  animation: branch-sway 10s ease-in-out both;
+}
+
+.water-reflection {
+  background:
+    linear-gradient(102deg, transparent 10%, rgba(218, 233, 226, .11) 36%, transparent 55%);
+  transform: translateX(-30%);
+  animation: reflection-pass 4s ease-in-out both;
+}
+
+.scene-08 .behavior-shot {
+  opacity: 0;
+}
+
+.scene-08.is-active .detail-turtle {
+  animation: first-observation 10s ease-in-out both;
+}
+
+.scene-08.is-active .detail-plover {
+  animation: second-observation 10s ease-in-out both;
+}
+
+.scene-09.is-active .scene-visual {
+  animation: stay-with-behavior 6s ease-in-out both;
+}
+
+.quiet-return {
+  filter: brightness(.62) saturate(.72);
+}
+
+.scene-10.is-active .quiet-return {
+  animation: return-to-place 5s ease-in-out both;
+}
+
+.question-background {
+  filter: brightness(.5) saturate(.66);
+}
+
+.scene-11.is-active .question-background {
+  animation: hold-the-place 7s ease-in-out both;
+}
+
+.question-layer {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(0, 7, 4, .16);
+}
+
+.question-layer p {
+  margin: 0;
+  color: rgba(246, 244, 235, .94);
+  font-size: clamp(1.35rem, 3.2vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: .14em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .65);
+  opacity: 0;
+}
+
+.scene-11.is-active .question-layer p {
+  animation: first-question 7s ease-in-out both;
+}
+
+.scene-12 {
+  display: grid;
+  place-items: center;
+  padding: clamp(1.25rem, 5vw, 4rem);
+  background:
+    radial-gradient(circle at 74% 12%, rgba(234, 221, 175, .15), transparent 28%),
+    linear-gradient(145deg, #1f2f23, #445042 56%, #243229);
+}
+
+.scene-12::before {
+  background:
+    radial-gradient(ellipse at center, transparent 38%, rgba(0, 5, 2, .42) 108%),
+    linear-gradient(122deg, transparent 42%, rgba(236, 224, 181, .09) 43% 57%, transparent 58%);
+}
+
+.field-notebook {
+  position: relative;
+  z-index: 6;
+  width: min(82vw, 760px);
+  aspect-ratio: 1.7;
+  padding: clamp(2rem, 7vw, 5rem);
+  overflow: hidden;
+  transform: rotate(-1.25deg);
+  border-radius: 3px 10px 10px 3px;
+  background:
+    repeating-linear-gradient(#eee8d7 0 41px, #c9c2af 42px 43px);
+  color: #263126;
+  box-shadow:
+    0 30px 85px rgba(0, 0, 0, .45),
+    inset 20px 0 24px rgba(91, 72, 51, .08);
+  opacity: 0;
+}
+
+.scene-12.is-active .field-notebook {
+  animation:
+    notebook-arrives 1.8s ease-out both,
+    notebook-breath 12s ease-in-out 1.8s infinite alternate;
+}
+
+.field-notebook::before {
+  position: absolute;
+  inset: 0 auto 0 4%;
+  width: 3px;
+  content: "";
+  background: rgba(120, 92, 63, .24);
+}
+
+.field-notebook p {
+  margin: 0;
+  font-family: "Kaiti TC", "DFKai-SB", serif;
+  font-size: clamp(1.45rem, 4.8vw, 3rem);
+  font-weight: 400;
+  letter-spacing: .1em;
+}
+
+.writing-line {
+  display: block;
+  width: 70%;
+  margin: clamp(2.25rem, 7vw, 4.5rem) auto 0;
+  border-bottom: 3px solid rgba(38, 49, 38, .72);
+}
+
+.notebook-light {
+  position: absolute;
+  top: -20%;
+  right: -7%;
+  width: 44%;
+  height: 64%;
+  transform: rotate(18deg);
+  border-radius: 80% 12% 72% 20%;
+  background: rgba(34, 67, 40, .17);
+  filter: blur(13px);
+  animation: notebook-shadow 9s ease-in-out infinite alternate;
+}
+
+.sound-toggle {
+  position: absolute;
+  z-index: 30;
+  left: max(12px, env(safe-area-inset-left));
+  bottom: max(14px, calc(env(safe-area-inset-bottom) + 6px));
+  min-height: 2.25rem;
+  padding: .4rem .65rem;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 999px;
+  background: rgba(2, 7, 4, .56);
+  color: rgba(244, 243, 236, .72);
+  font-size: .75rem;
+  letter-spacing: .04em;
+  cursor: pointer;
+  opacity: .74;
+  backdrop-filter: blur(10px);
+  transition:
+    opacity 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.sound-toggle:hover,
+.sound-toggle:focus-visible {
+  opacity: 1;
+  background: rgba(7, 17, 11, .78);
+  color: rgba(255, 255, 255, .94);
+}
+
+.sound-toggle:focus-visible {
+  outline: 2px solid rgba(227, 205, 153, .76);
+  outline-offset: 3px;
+}
+
+.sound-toggle:disabled {
+  cursor: wait;
+  opacity: .42;
+}
+
+.prototype-meta {
+  position: absolute;
+  z-index: 30;
+  top: max(14px, env(safe-area-inset-top));
+  left: max(14px, env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .48rem .7rem;
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 999px;
+  background: rgba(2, 7, 4, .66);
+  color: rgba(255, 255, 255, .78);
+  font-size: .75rem;
+  backdrop-filter: blur(12px);
+}
+
+.prototype-meta span:first-child {
+  color: #e4ce98;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.prototype-progress {
+  position: absolute;
+  z-index: 30;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, .1);
+}
+
+.prototype-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #e3cd99;
+}
+
+.prototype-controls {
+  position: absolute;
+  z-index: 30;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(18px, calc(env(safe-area-inset-bottom) + 8px));
+  display: flex;
+  gap: .4rem;
+  padding: .42rem;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 12px;
+  background: rgba(2, 7, 4, .68);
+  backdrop-filter: blur(12px);
+}
+
+.prototype-controls button {
+  min-height: 2.4rem;
+  padding: .42rem .65rem;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .07);
+  color: rgba(255, 255, 255, .88);
+  cursor: pointer;
+}
+
+.prototype-controls button:hover,
+.prototype-controls button:focus-visible {
+  background: rgba(255, 255, 255, .14);
+  outline: 2px solid rgba(227, 205, 153, .75);
+  outline-offset: 2px;
+}
+
+.prototype-controls button:disabled {
+  cursor: default;
+  opacity: .38;
+}
+
+.intro-stage.is-paused .scene *,
+.intro-stage.is-paused .scene::before,
+.intro-stage.is-paused .scene::after {
+  animation-play-state: paused !important;
+}
+
+@keyframes quiet-grain {
+  0% { transform: translate3d(-2%, -2%, 0); }
+  25% { transform: translate3d(2%, 1%, 0); }
+  50% { transform: translate3d(-1%, 3%, 0); }
+  75% { transform: translate3d(3%, -1%, 0); }
+  100% { transform: translate3d(-2%, -2%, 0); }
+}
+
+@keyframes student-look {
+  from { transform: scale(1.01) translate3d(-.4%, .18%, 0); }
+  to { transform: scale(1.03) translate3d(.45%, -.24%, 0); }
+}
+
+@keyframes student-look-right {
+  from { transform: scale(1.015) translate3d(.45%, .16%, 0); }
+  to { transform: scale(1.03) translate3d(-.45%, -.22%, 0); }
+}
+
+@keyframes predawn-reveal {
+  from { filter: brightness(.18) saturate(.6); }
+  58% { filter: brightness(.31) saturate(.66); }
+  to { filter: brightness(.46) saturate(.7); }
+}
+
+@keyframes dawn-reveal {
+  from { filter: brightness(.4) saturate(.64); }
+  to { filter: brightness(.84) saturate(.76); }
+}
+
+@keyframes kneel-and-notice {
+  0% { transform: scale(1.02) translate3d(-1.2%, -1.3%, 0); filter: brightness(.74); }
+  42% { transform: scale(1.025) translate3d(-1.25%, -1.45%, 0); }
+  100% { transform: scale(1.03) translate3d(.8%, .55%, 0); filter: brightness(.86); }
+}
+
+@keyframes follow-feather {
+  from { transform: scale(1.01) translate3d(-.65%, -.25%, 0); }
+  to { transform: scale(1.03) translate3d(.8%, .45%, 0); }
+}
+
+@keyframes watch-the-grass {
+  0%, 24% { transform: scale(1.01) translate3d(-.5%, 0, 0); }
+  100% { transform: scale(1.03) translate3d(.75%, -.3%, 0); }
+}
+
+@keyframes watch-the-water {
+  0%, 28% { transform: scale(1.008) translate3d(.35%, 0, 0); }
+  100% { transform: scale(1.03) translate3d(-.65%, .25%, 0); }
+}
+
+@keyframes find-the-butterfly {
+  0%, 24% { transform: scale(1.01) translate3d(1%, .3%, 0); filter: brightness(.76); }
+  100% { transform: scale(1.03) translate3d(-.55%, -.35%, 0); filter: brightness(.88); }
+}
+
+@keyframes night-breathe {
+  from { opacity: .8; }
+  to { opacity: .36; }
+}
+
+@keyframes mist-drift {
+  from { transform: translate3d(-7%, 2%, 0); opacity: .1; }
+  40% { opacity: .7; }
+  to { transform: translate3d(8%, -2%, 0); opacity: .28; }
+}
+
+@keyframes leaf-moves-aside {
+  0%, 34% { transform: translate3d(0, 0, 0) rotate(-7deg); opacity: .92; }
+  100% { transform: translate3d(-12%, 5%, 0) rotate(-12deg); opacity: .5; }
+}
+
+@keyframes foreground-grass-moves {
+  0%, 22% { transform: skewX(-1deg); opacity: .56; }
+  48% { transform: skewX(4deg) translateX(1.5%); opacity: .76; }
+  100% { transform: skewX(-3deg) translateX(-1%); opacity: .58; }
+}
+
+@keyframes branch-sway {
+  from { transform: translate3d(-2%, -1%, 0) rotate(7deg); }
+  to { transform: translate3d(3%, 1%, 0) rotate(10deg); }
+}
+
+@keyframes reflection-pass {
+  from { transform: translateX(-36%); opacity: .2; }
+  42% { opacity: .65; }
+  to { transform: translateX(34%); opacity: .2; }
+}
+
+@keyframes first-observation {
+  0% { opacity: 0; transform: scale(1.015) translate3d(-.55%, .18%, 0); filter: brightness(.55); }
+  8%, 43% { opacity: 1; }
+  52%, 100% { opacity: 0; transform: scale(1.03) translate3d(.7%, -.26%, 0); filter: brightness(.88); }
+}
+
+@keyframes second-observation {
+  0%, 43% { opacity: 0; transform: scale(1.015) translate3d(.55%, .16%, 0); filter: brightness(.58); }
+  53%, 100% { opacity: 1; transform: scale(1.03) translate3d(-.72%, -.25%, 0); filter: brightness(.88); }
+}
+
+@keyframes stay-with-behavior {
+  0%, 30% { transform: scale(1.01) translate3d(-.75%, .28%, 0); filter: brightness(.74) saturate(.75); }
+  100% { transform: scale(1.03) translate3d(.7%, -.2%, 0); filter: brightness(.86) saturate(.8); }
+}
+
+@keyframes return-to-place {
+  from { transform: scale(1.02) translate3d(.45%, -.12%, 0); filter: brightness(.56) saturate(.68); }
+  to { transform: scale(1.00) translate3d(0, 0, 0); filter: brightness(.48) saturate(.6); }
+}
+
+@keyframes calm-down {
+  from { opacity: .12; }
+  to { opacity: .42; }
+}
+
+@keyframes hold-the-place {
+  from { transform: scale(1.01); filter: brightness(.46) saturate(.62); }
+  to { transform: scale(1.02); filter: brightness(.38) saturate(.56); }
+}
+
+@keyframes first-question {
+  0%, 10% { opacity: 0; transform: translateY(8px); }
+  24%, 67% { opacity: 1; transform: translateY(0); }
+  88%, 100% { opacity: 0; transform: translateY(-5px); }
+}
+
+@keyframes notebook-arrives {
+  from { opacity: 0; transform: rotate(-1.25deg) translateY(18px); }
+  to { opacity: 1; transform: rotate(-1.25deg) translateY(0); }
+}
+
+@keyframes notebook-shadow {
+  from { transform: translate3d(-3%, -2%, 0) rotate(18deg); }
+  to { transform: translate3d(4%, 3%, 0) rotate(20deg); }
+}
+
+@keyframes notebook-breath {
+  from { transform: rotate(-1.25deg) translateY(0); }
+  to { transform: rotate(-1.25deg) translateY(-4px); }
+}
+
+@media (max-width: 700px) {
+  .field-notebook {
+    width: min(86vw, 500px);
+    aspect-ratio: 1.05;
+  }
+
+  .prototype-meta {
+    max-width: calc(100% - 28px);
+  }
+
+  .prototype-controls {
+    right: 50%;
+    transform: translateX(50%);
+    gap: .28rem;
+  }
+
+  .prototype-controls button {
+    flex-shrink: 0;
+    padding-inline: .45rem;
+    font-size: .75rem;
+    white-space: nowrap;
+  }
+}
+
+@media (orientation: portrait) {
+  .storyboard-frame {
+    background-size: auto 440%;
+  }
+
+  .storyboard-detail {
+    background-size: auto 930%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .scene *,
+  .scene::before,
+  .scene::after {
+    transition-duration: 180ms !important;
+    animation-duration: 180ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
